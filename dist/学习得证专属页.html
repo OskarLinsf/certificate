@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学习得证 - 大商所投教精品</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        body { background: #e0e0e0; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; overflow: hidden; }
+        .phone-container { width: 320px; height: 600px; background: white; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; position: relative; display: flex; flex-direction: column; }
+        .page-content { flex: 1; overflow-y: auto; background: #f5f7fa; scrollbar-width: none; padding-bottom: 56px; }
+        .page-content::-webkit-scrollbar { display: none; }
+        
+        .top-bar { display: flex; align-items: center; padding: 12px 16px; padding-top: 44px; background-color: white; border-bottom: 1px solid #f0f0f0; }
+        .back-btn { font-size: 22px; color: #333; cursor: pointer; margin-right: 12px; }
+        .page-title { font-size: 18px; font-weight: bold; color: #333; }
+        .page-subtitle { font-size: 14px; color: #999; margin-left: 8px; }
+        
+        .tabs-container { display: flex; background: white; padding: 0 12px; border-bottom: 1px solid #f0f0f0; }
+        .tab-item { flex: 1; text-align: center; padding: 14px 0; font-size: 14px; color: #666; cursor: pointer; position: relative; }
+        .tab-item.active { color: #1677ff; font-weight: 600; }
+        .tab-item.active::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 24px; height: 2px; background: #1677ff; border-radius: 1px; }
+        
+        .section-container { display: none; padding: 16px; }
+        .section-container.active { display: block; }
+        
+        .cert-card { background: white; border-radius: 12px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); cursor: pointer; transition: all 0.2s; }
+        .cert-card:active { transform: scale(0.98); }
+        .cert-header { display: flex; align-items: center; margin-bottom: 12px; }
+        .cert-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-right: 12px; }
+        .cert-info { flex: 1; }
+        .cert-name { font-size: 16px; font-weight: 600; color: #333; margin-bottom: 2px; }
+        .cert-desc { font-size: 12px; color: #999; }
+        .cert-status { padding: 2px 8px; border-radius: 12px; font-size: 10px; }
+        .cert-status.learning { background: #e6f7ff; color: #1890ff; }
+        .cert-status.completed { background: #f6ffed; color: #52c41a; }
+        .cert-status.not-started { background: #fff7e6; color: #fa8c16; }
+        .cert-status.expired { background: #f5f5f5; color: #999; }
+        .cert-status.free { background: #e6fffb; color: #13c2c2; }
+        
+        .progress-section { margin-bottom: 8px; }
+        .progress-title { font-size: 11px; color: #666; margin-bottom: 6px; }
+        .progress-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+        .progress-item { background: #f5f7fa; border-radius: 6px; padding: 6px; text-align: center; }
+        .progress-value { font-size: 14px; font-weight: 600; color: #1677ff; }
+        .progress-label { font-size: 9px; color: #999; margin-top: 1px; }
+        
+        .progress-bar { height: 6px; background: #f0f0f0; border-radius: 3px; overflow: hidden; margin-bottom: 4px; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #1677ff, #40a9ff); border-radius: 3px; transition: width 0.3s; }
+        .progress-text { font-size: 11px; color: #999; }
+        
+        .course-list { margin-top: 8px; }
+        .course-item { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px solid #f5f5f5; }
+        .course-item:last-child { border-bottom: none; }
+        .course-checkbox { width: 18px; height: 18px; margin-right: 10px; border: 2px solid #ddd; border-radius: 4px; display: flex; align-items: center; justify-content: center; }
+        .course-checkbox.checked { background: #1677ff; border-color: #1677ff; }
+        .course-checkbox.checked::after { content: '✓'; color: white; font-size: 12px; }
+        .course-info { flex: 1; }
+        .course-name { font-size: 13px; color: #333; }
+        .course-status { font-size: 10px; color: #999; margin-top: 1px; }
+        
+        .cert-btn { width: 100%; padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 500; border: none; cursor: pointer; margin-top: 8px; }
+        .cert-btn.primary { background: linear-gradient(135deg, #1677ff, #40a9ff); color: white; }
+        .cert-btn.secondary { background: #f5f5f5; color: #666; }
+        
+        .empty-state { text-align: center; padding: 40px 0; color: #999; }
+        .empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
+        .empty-text { font-size: 14px; }
+        
+        .detail-page { display: none; }
+        .detail-page.active { display: block; }
+        .detail-header { background: linear-gradient(135deg, #1677ff, #40a9ff); padding: 32px 16px; color: white; }
+        .detail-title { font-size: 20px; font-weight: bold; margin-bottom: 4px; }
+        .detail-desc { font-size: 13px; opacity: 0.9; margin-bottom: 16px; }
+        .detail-progress { display: flex; gap: 20px; }
+        .detail-progress-item { text-align: center; }
+        .detail-progress-value { font-size: 24px; font-weight: bold; }
+        .detail-progress-label { font-size: 11px; opacity: 0.8; }
+        
+        .grid-container { padding: 16px; }
+        .grid-9 { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(4, 1fr); gap: 12px; }
+        .grid-item { background: white; border-radius: 12px; padding: 16px 8px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); cursor: pointer; transition: all 0.2s; }
+        .grid-item:active { transform: scale(0.95); }
+        .grid-icon { width: 40px; height: 40px; border-radius: 10px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .grid-icon.blue { background: #e6f7ff; color: #1890ff; }
+        .grid-icon.green { background: #f6ffed; color: #52c41a; }
+        .grid-icon.orange { background: #fff7e6; color: #fa8c16; }
+        .grid-icon.purple { background: #f9f0ff; color: #722ed1; }
+        .grid-icon.red { background: #fff1f0; color: #f5222d; }
+        .grid-icon.cyan { background: #e6fffb; color: #13c2c2; }
+        .grid-icon.yellow { background: #fffbe6; color: #faad14; }
+        .grid-icon.pink { background: #fff0f6; color: #eb2f96; }
+        .grid-text { font-size: 12px; color: #333; font-weight: 500; }
+        
+        .course-section { padding: 16px; }
+        .section-title { display: flex; align-items: center; font-size: 16px; font-weight: 600; color: #333; margin-bottom: 12px; }
+        .section-icon { margin-right: 8px; font-size: 18px; }
+        .section-count { margin-left: auto; font-size: 12px; color: #999; font-weight: normal; }
+        .course-list-container { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .detail-course-item { display: flex; align-items: center; padding: 12px 16px; border-bottom: 1px solid #f5f5f5; transition: background 0.2s; cursor: pointer; }
+        .detail-course-item:last-child { border-bottom: none; }
+        .detail-course-item:active { background: #f5f7fa; }
+        .detail-course-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 12px; }
+        .detail-course-info { flex: 1; }
+        .detail-course-name { font-size: 14px; color: #333; font-weight: 500; }
+        .detail-course-status { font-size: 11px; color: #999; margin-top: 2px; }
+        .detail-course-status.completed { color: #52c41a; }
+        .detail-course-status.learning { color: #1890ff; }
+        .detail-course-status.not-started { color: #999; }
+        .detail-course-progress { width: 60px; height: 4px; background: #f0f0f0; border-radius: 2px; overflow: hidden; margin-right: 8px; }
+        .detail-course-progress-fill { height: 100%; background: linear-gradient(90deg, #1677ff, #40a9ff); border-radius: 2px; }
+        .detail-course-percent { font-size: 11px; color: #999; width: 32px; text-align: right; }
+        
+        .float-share-btn { position: fixed; bottom: 70px; right: 20px; width: 48px; height: 48px; background: linear-gradient(135deg, #1677ff, #40a9ff); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 22px; box-shadow: 0 4px 12px rgba(22,119,255,0.4); z-index: 9999; cursor: pointer; }
+        
+        .bottom-nav { position: absolute; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 6px 0; border-top: 1px solid #f0f0f0; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); z-index: 9999; height: 50px; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #999; text-decoration: none; font-size: 11px; }
+        .nav-item.active { color: #1677ff; }
+        .nav-icon { width: 24px; height: 24px; }
+        
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s; }
+        .modal-overlay.show { opacity: 1; visibility: visible; }
+        .modal-content { width: 85%; max-width: 340px; background: white; border-radius: 16px; padding: 24px; position: relative; }
+        .modal-close { position: absolute; top: 12px; right: 16px; font-size: 28px; color: #999; cursor: pointer; line-height: 1; }
+        .modal-title { font-size: 18px; font-weight: bold; text-align: center; color: #333; margin-bottom: 20px; }
+        .modal-btn { width: 100%; padding: 12px; border-radius: 10px; font-size: 15px; font-weight: 500; border: none; cursor: pointer; margin-top: 12px; }
+        .modal-btn.primary { background: linear-gradient(135deg, #1677ff, #40a9ff); color: white; }
+        .modal-btn.secondary { background: #f5f5f5; color: #666; }
+        
+        .cert-modal-content { width: 100%; max-width: 360px; background: #fff; border-radius: 8px; overflow: hidden; position: relative; box-shadow: 0 15px 50px rgba(0,0,0,0.3); }
+        .cert-body { background: #fff; padding: 16px; height: auto; }
+        .cert-lace-border { padding: 12px; background: radial-gradient(circle at 10px 10px, rgba(196,149,106,0.08) 2px, transparent 2.5px), radial-gradient(circle at 90px 20px, rgba(196,149,106,0.06) 1.5px, transparent 2px), radial-gradient(circle at 170px 10px, rgba(196,149,106,0.08) 2px, transparent 2.5px), radial-gradient(circle at 260px 20px, rgba(196,149,106,0.06) 1.5px, transparent 2px), radial-gradient(circle at 10px 80px, rgba(196,149,106,0.06) 1.5px, transparent 2px), radial-gradient(circle at 90px 70px, rgba(196,149,106,0.08) 2px, transparent 2.5px), radial-gradient(circle at 170px 80px, rgba(196,149,106,0.06) 1.5px, transparent 2px), radial-gradient(circle at 260px 70px, rgba(196,149,106,0.08) 2px, transparent 2.5px), radial-gradient(circle at 50px 140px, rgba(196,149,106,0.07) 1.8px, transparent 2.3px), radial-gradient(circle at 130px 130px, rgba(196,149,106,0.09) 2.2px, transparent 2.7px), radial-gradient(circle at 210px 140px, rgba(196,149,106,0.07) 1.8px, transparent 2.3px), radial-gradient(circle at 290px 130px, rgba(196,149,106,0.09) 2.2px, transparent 2.7px), linear-gradient(135deg, #faf8f3 0%, #fff 100%); border-radius: 4px; border: 1px solid #e8dcc8; }
+        .cert-inner { padding: 16px 12px; background: #fff; border-radius: 4px; display: flex; flex-direction: column; position: relative; }
+        .cert-corner-decoration { position: absolute; width: 20px; height: 20px; border-color: #b8860b; border-style: solid; }
+        .cert-corner-decoration.top-left { top: 0; left: 0; border-width: 3px 0 0 3px; }
+        .cert-corner-decoration.top-right { top: 0; right: 0; border-width: 3px 3px 0 0; }
+        .cert-corner-decoration.bottom-left { bottom: 0; left: 0; border-width: 0 0 3px 3px; }
+        .cert-corner-decoration.bottom-right { bottom: 0; right: 0; border-width: 0 3px 3px 0; }
+        .cert-content { display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .cert-logo { width: 45px; height: 45px; margin-bottom: 10px; border: 2px solid #7eb8da; border-radius: 4px; display: flex; align-items: center; justify-content: center; background: #f0f8ff; }
+        .cert-logo img { width: 36px; height: 36px; object-fit: contain; }
+        .cert-title { font-size: 18px; font-weight: 700; color: #0a2540; letter-spacing: 5px; margin-bottom: 4px; }
+        .cert-subtitle { font-size: 9px; color: #546e7a; letter-spacing: 1px; text-transform: uppercase; }
+        .cert-info-section { width: 100%; display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+        .cert-info-box { background: #e8f1f8; padding: 6px 12px; border-radius: 4px; border: 1px solid #c5d9e8; }
+        .cert-info-label { font-size: 9px; color: #546e7a; margin-bottom: 1px; }
+        .cert-info-value { font-size: 13px; color: #1a2744; font-weight: 600; }
+        .cert-info-value.highlight { color: #0a2540; }
+        .cert-course-box { background: #e8f1f8; padding: 6px 12px; border-radius: 4px; border: 1px solid #c5d9e8; }
+        .cert-course-label { font-size: 9px; color: #546e7a; margin-bottom: 1px; }
+        .cert-course-value { font-size: 13px; color: #1a2744; font-weight: 600; }
+        .cert-comment-section { width: 100%; background: linear-gradient(135deg, #fff3e0 0%, #fff 100%); padding: 8px 10px; border-radius: 4px; border-left: 3px solid #b8860b; margin-bottom: 8px; }
+        .cert-comment-text { font-size: 10px; color: #4a5568; line-height: 1.5; text-align: justify; }
+        .cert-conditions-section { width: 100%; padding: 6px 10px; background: #dcfce7; border-radius: 4px; border: 1px solid #86efac; margin-bottom: 8px; }
+        .cert-conditions-title { font-size: 9px; color: #166534; font-weight: 600; margin-bottom: 3px; }
+        .cert-conditions-text { font-size: 9px; color: #15803d; line-height: 1.4; }
+        .cert-footer-section { width: 100%; display: flex; justify-content: space-between; align-items: flex-end; padding-top: 4px; border-top: 1px solid #c5d9e8; }
+        .cert-qrcode-area { display: flex; flex-direction: column; align-items: center; }
+        .cert-qrcode { width: 40px; height: 40px; border: 1px solid #c5d9e8; border-radius: 4px; overflow: hidden; }
+        .cert-qrcode img { width: 100%; height: 100%; object-fit: cover; }
+        .cert-number { font-size: 8px; color: #546e7a; margin-top: 3px; }
+        .cert-seal-area { display: flex; flex-direction: column; align-items: center; padding-top: 4px; }
+        .cert-seal { font-size: 20px; color: #c41d33; font-style: italic; font-weight: 500; letter-spacing: 2px; transform: rotate(-3deg); text-decoration: underline; text-decoration-color: rgba(196,29,51,0.4); text-decoration-thickness: 1px; text-underline-offset: 4px; line-height: 1.2; }
+        .cert-signer { font-size: 10px; color: #546e7a; font-weight: 500; margin-top: 4px; }
+        .cert-date { font-size: 10px; color: #546e7a; margin-top: 4px; margin-bottom: 0; }
+        .cert-actions-section { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 8px; }
+        .cert-action-btn { padding: 6px 4px; border: none; border-radius: 4px; font-size: 9px; color: white; cursor: pointer; font-weight: 600; }
+        .cert-action-btn.red { background: linear-gradient(135deg, #e53935, #c62828); }
+        .cert-action-btn.cyan { background: linear-gradient(135deg, #00acc1, #00838f); }
+        .cert-action-btn.green { background: linear-gradient(135deg, #43a047, #2e7d32); }
+        .cert-action-btn.blue { background: linear-gradient(135deg, #1e88e5, #1565c0); }
+        .cert-close-btn { width: 100%; padding: 8px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 4px; color: #666; font-size: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <div class="page-content" id="mainPage">
+            <div class="top-bar">
+                <div class="back-btn" onclick="goBack()">←</div>
+                <div class="page-title">学习得证</div>
+            </div>
+            
+            <div class="tabs-container">
+                <div class="tab-item active" onclick="switchTab('learning')">正在学习</div>
+                <div class="tab-item" onclick="switchTab('notRegistered')">未报名</div>
+                <div class="tab-item" onclick="switchTab('history')">历史课程</div>
+            </div>
+            
+            <div class="section-container active" id="learningSection">
+                <div class="cert-card" onclick="openDetail('结算专员证书')">
+                    <div class="cert-header">
+                        <div class="cert-icon" style="background: linear-gradient(135deg, #1677ff, #40a9ff); color: white;">📋</div>
+                        <div class="cert-info">
+                            <div class="cert-name">结算专员证书</div>
+                            <div class="cert-desc">完成结算业务培训课程</div>
+                        </div>
+                        <div class="cert-status learning">学习中</div>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-title">学习进度</div>
+                        <div class="progress-grid">
+                            <div class="progress-item"><div class="progress-value">8/12</div><div class="progress-label">课时</div></div>
+                            <div class="progress-item"><div class="progress-value">2/3</div><div class="progress-label">考试</div></div>
+                            <div class="progress-item"><div class="progress-value">4/5</div><div class="progress-label">课程</div></div>
+                        </div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 65%;"></div></div>
+                        <div class="progress-text">已完成 65%</div>
+                    </div>
+                    <button class="cert-btn primary" onclick="event.stopPropagation(); openDetail('结算专员证书')">继续学习</button>
+                </div>
+                
+                <div class="cert-card" onclick="openDetail('期权交易师证书')">
+                    <div class="cert-header">
+                        <div class="cert-icon" style="background: linear-gradient(135deg, #722ed1, #9254de); color: white;">📈</div>
+                        <div class="cert-info">
+                            <div class="cert-name">期权交易师证书</div>
+                            <div class="cert-desc">掌握期权交易策略与应用</div>
+                        </div>
+                        <div class="cert-status learning">学习中</div>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-title">学习进度</div>
+                        <div class="progress-grid">
+                            <div class="progress-item"><div class="progress-value">15/20</div><div class="progress-label">课时</div></div>
+                            <div class="progress-item"><div class="progress-value">1/2</div><div class="progress-label">考试</div></div>
+                            <div class="progress-item"><div class="progress-value">3/4</div><div class="progress-label">课程</div></div>
+                        </div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 75%;"></div></div>
+                        <div class="progress-text">已完成 75%</div>
+                    </div>
+                    <button class="cert-btn primary" onclick="event.stopPropagation(); openDetail('期权交易师证书')">继续学习</button>
+                </div>
+            </div>
+            
+            <div class="section-container" id="notRegisteredSection">
+                <div class="cert-card" onclick="openDetail('风控专员证书')">
+                    <div class="cert-header">
+                        <div class="cert-icon" style="background: linear-gradient(135deg, #fa8c16, #ffad33); color: white;">🛡️</div>
+                        <div class="cert-info">
+                            <div class="cert-name">风控专员证书</div>
+                            <div class="cert-desc">风险控制与合规管理培训</div>
+                        </div>
+                        <div class="cert-status not-started">未报名</div>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-title">课程信息</div>
+                        <div class="progress-grid">
+                            <div class="progress-item"><div class="progress-value">16</div><div class="progress-label">课时</div></div>
+                            <div class="progress-item"><div class="progress-value">3</div><div class="progress-label">考试</div></div>
+                            <div class="progress-item"><div class="progress-value">5</div><div class="progress-label">课程</div></div>
+                        </div>
+                    </div>
+                    <button class="cert-btn secondary" onclick="event.stopPropagation(); showApplyModal('风控专员证书')">立即报名</button>
+                </div>
+                
+                <div class="cert-card" onclick="openDetail('期货分析师证书')">
+                    <div class="cert-header">
+                        <div class="cert-icon" style="background: linear-gradient(135deg, #eb2f96, #ff729f); color: white;">🔍</div>
+                        <div class="cert-info">
+                            <div class="cert-name">期货分析师证书</div>
+                            <div class="cert-desc">市场分析与研究方法</div>
+                        </div>
+                        <div class="cert-status not-started">未报名</div>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-title">课程信息</div>
+                        <div class="progress-grid">
+                            <div class="progress-item"><div class="progress-value">24</div><div class="progress-label">课时</div></div>
+                            <div class="progress-item"><div class="progress-value">4</div><div class="progress-label">考试</div></div>
+                            <div class="progress-item"><div class="progress-value">6</div><div class="progress-label">课程</div></div>
+                        </div>
+                    </div>
+                    <button class="cert-btn secondary" onclick="event.stopPropagation(); showApplyModal('期货分析师证书')">立即报名</button>
+                </div>
+                
+                <div class="cert-card" onclick="openDetail('投资者教育讲师证书')">
+                    <div class="cert-header">
+                        <div class="cert-icon" style="background: linear-gradient(135deg, #13c2c2, #36cfc9); color: white;">🎓</div>
+                        <div class="cert-info">
+                            <div class="cert-name">投资者教育讲师证书</div>
+                            <div class="cert-desc">投教课程设计与讲授技巧</div>
+                        </div>
+                        <div class="cert-status not-started">未报名</div>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-title">课程信息</div>
+                        <div class="progress-grid">
+                            <div class="progress-item"><div class="progress-value">12</div><div class="progress-label">课时</div></div>
+                            <div class="progress-item"><div class="progress-value">2</div><div class="progress-label">考试</div></div>
+                            <div class="progress-item"><div class="progress-value">4</div><div class="progress-label">课程</div></div>
+                        </div>
+                    </div>
+                    <button class="cert-btn secondary" onclick="event.stopPropagation(); showApplyModal('投资者教育讲师证书')">立即报名</button>
+                </div>
+                
+                <div class="cert-card" onclick="openDetail('期货市场基础知识')">
+                    <div class="cert-header">
+                        <div class="cert-icon" style="background: linear-gradient(135deg, #52c41a, #73d13d); color: white;">🌱</div>
+                        <div class="cert-info">
+                            <div class="cert-name">期货市场基础知识</div>
+                            <div class="cert-desc">免费课程，直接开始学习</div>
+                        </div>
+                        <div class="cert-status free">免费</div>
+                    </div>
+                    <button class="cert-btn primary" onclick="event.stopPropagation(); openDetail('期货市场基础知识')">开始学习</button>
+                </div>
+            </div>
+            
+            <div class="section-container" id="historySection">
+                <div class="cert-card">
+                    <div class="cert-header">
+                        <div class="cert-icon" style="background: linear-gradient(135deg, #52c41a, #73d13d); color: white;">🏆</div>
+                        <div class="cert-info">
+                            <div class="cert-name">投资者教育基础证书</div>
+                            <div class="cert-desc">已完成基础课程学习</div>
+                        </div>
+                        <div class="cert-status completed">已完成</div>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-title">获取时间</div>
+                        <div style="font-size: 13px; color: #666;">2026年3月15日</div>
+                    </div>
+                    <button class="cert-btn secondary" onclick="showCertModal('投资者教育基础证书')">查看证书</button>
+                </div>
+                
+                <div class="cert-card">
+                    <div class="cert-header">
+                        <div class="cert-icon" style="background: linear-gradient(135deg, #1890ff, #40a9ff); color: white;">📊</div>
+                        <div class="cert-info">
+                            <div class="cert-name">期权基础知识证书</div>
+                            <div class="cert-desc">期权入门培训课程</div>
+                        </div>
+                        <div class="cert-status expired">已过期</div>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-title">过期时间</div>
+                        <div style="font-size: 13px; color: #666;">2026年2月28日</div>
+                    </div>
+                    <button class="cert-btn primary" onclick="openDetail('期权基础知识证书')">报名下一期</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-content detail-page" id="detailPage">
+            <div class="top-bar">
+                <div class="back-btn" onclick="closeDetail()">←</div>
+                <div class="page-title" id="detailCertName">证书详情</div>
+            </div>
+            
+            <div class="detail-header">
+                <div class="detail-title" id="detailTitle">证书名称</div>
+                <div class="detail-desc" id="detailDesc">证书描述</div>
+                <div class="detail-progress">
+                    <div class="detail-progress-item">
+                        <div class="detail-progress-value" id="detailHours">0</div>
+                        <div class="detail-progress-label">课时</div>
+                    </div>
+                    <div class="detail-progress-item">
+                        <div class="detail-progress-value" id="detailExams">0</div>
+                        <div class="detail-progress-label">考试</div>
+                    </div>
+                    <div class="detail-progress-item">
+                        <div class="detail-progress-value" id="detailCourses">0</div>
+                        <div class="detail-progress-label">课程</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid-container">
+                <div class="grid-9">
+                    <div class="grid-item" onclick="openGridPage('courseIntro')">
+                        <div class="grid-icon blue">📖</div>
+                        <div class="grid-text">课程介绍</div>
+                    </div>
+                    <div class="grid-item" onclick="openGridPage('materials')">
+                        <div class="grid-icon green">📥</div>
+                        <div class="grid-text">材料获取</div>
+                    </div>
+                    <div class="grid-item" onclick="openGridPage('apply')">
+                        <div class="grid-icon orange">📝</div>
+                        <div class="grid-text">学习报名</div>
+                    </div>
+                    <div class="grid-item" onclick="openGridPage('videos')">
+                        <div class="grid-icon purple">🎬</div>
+                        <div class="grid-text">学习视频</div>
+                    </div>
+                    <div class="grid-item" onclick="openGridPage('reminder')">
+                        <div class="grid-icon red">🔔</div>
+                        <div class="grid-text">报名提醒</div>
+                    </div>
+                    <div class="grid-item" id="nextStudyItem" style="display: none;" onclick="openGridPage('nextStudy')">
+                        <div class="grid-icon cyan">🔄</div>
+                        <div class="grid-text">下一期学习</div>
+                    </div>
+                    <div class="grid-item" onclick="openGridPage('studyMates')">
+                        <div class="grid-icon yellow">👥</div>
+                        <div class="grid-text">同期学习</div>
+                    </div>
+                    <div class="grid-item" onclick="openGridPage('comments')">
+                        <div class="grid-icon pink">💬</div>
+                        <div class="grid-text">课程留言</div>
+                    </div>
+                    <div class="grid-item" onclick="openGridPage('survey')">
+                        <div class="grid-icon green">📋</div>
+                        <div class="grid-text">问卷收集</div>
+                    </div>
+                    <div class="grid-item" onclick="openGridPage('progress')">
+                        <div class="grid-icon blue">📊</div>
+                        <div class="grid-text">学习进度</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="float-share-btn" onclick="shareCourse()">🔗</div>
+        </div>
+        
+        <div class="page-content" id="courseIntroPage" style="display: none;">
+            <div class="top-bar">
+                <div class="back-btn" onclick="closeGridPage()">←</div>
+                <div class="page-title">课程介绍</div>
+            </div>
+            <div style="padding: 16px;">
+                <div style="font-size: 16px; font-weight: 600; color: #333; margin-bottom: 12px;">📖 课程概述</div>
+                <div style="font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 16px;">
+                    本证书课程系统性地涵盖了相关领域的核心知识和实践技能，通过理论学习与实操训练相结合的方式，帮助学员全面提升专业能力。
+                </div>
+                <div style="font-size: 16px; font-weight: 600; color: #333; margin-bottom: 12px;">👥 适合人群</div>
+                <div style="font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 16px;">
+                    相关从业者、学习者以及对本领域感兴趣的用户，无论您是初入行业的新人还是经验丰富的专业人士，都能从中获益。
+                </div>
+                <div style="font-size: 16px; font-weight: 600; color: #333; margin-bottom: 12px;">🎯 学习收获</div>
+                <div style="font-size: 14px; color: #666; line-height: 1.6;">
+                    <div style="margin-bottom: 8px;">• 掌握核心理论知识和实践技能</div>
+                    <div style="margin-bottom: 8px;">• 提升专业素养和综合能力</div>
+                    <div style="margin-bottom: 8px;">• 获取权威认证证书</div>
+                    <div>• 拓展职业发展空间</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-content" id="materialsPage" style="display: none;">
+            <div class="top-bar">
+                <div class="back-btn" onclick="closeGridPage()">←</div>
+                <div class="page-title">材料获取</div>
+            </div>
+            <div style="padding: 16px;">
+                <div style="font-size: 14px; color: #666; margin-bottom: 16px;">课程学习材料下载：</div>
+                <div style="background: white; border-radius: 12px; overflow: hidden;">
+                    <div style="padding: 14px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center;">
+                            <span style="font-size: 20px; margin-right: 12px;">📄</span>
+                            <div>
+                                <div style="font-size: 14px; color: #333;">课程大纲.pdf</div>
+                                <div style="font-size: 12px; color: #999;">2.5 MB</div>
+                            </div>
+                        </div>
+                        <button class="cert-btn secondary" style="padding: 6px 16px; font-size: 12px;">下载</button>
+                    </div>
+                    <div style="padding: 14px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center;">
+                            <span style="font-size: 20px; margin-right: 12px;">📊</span>
+                            <div>
+                                <div style="font-size: 14px; color: #333;">数据分析模板.xlsx</div>
+                                <div style="font-size: 12px; color: #999;">1.8 MB</div>
+                            </div>
+                        </div>
+                        <button class="cert-btn secondary" style="padding: 6px 16px; font-size: 12px;">下载</button>
+                    </div>
+                    <div style="padding: 14px; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center;">
+                            <span style="font-size: 20px; margin-right: 12px;">📖</span>
+                            <div>
+                                <div style="font-size: 14px; color: #333;">学习指南.doc</div>
+                                <div style="font-size: 12px; color: #999;">856 KB</div>
+                            </div>
+                        </div>
+                        <button class="cert-btn secondary" style="padding: 6px 16px; font-size: 12px;">下载</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-content" id="applyPage" style="display: none;">
+            <div class="top-bar">
+                <div class="back-btn" onclick="closeGridPage()">←</div>
+                <div class="page-title">学习报名</div>
+            </div>
+            <div style="padding: 16px;">
+                <div style="font-size: 14px; color: #666; margin-bottom: 16px;">您正在报名：<span style="color: #1677ff; font-weight: 600;" id="applyPageCourseName"></span></div>
+                
+                <div style="background: white; border-radius: 12px; padding: 16px;">
+                    <div style="margin-bottom: 14px;">
+                        <label style="font-size: 13px; color: #666; display: block; margin-bottom: 4px;">姓名 *</label>
+                        <input type="text" id="applyPageName" placeholder="请输入您的姓名" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; box-sizing: border-box;">
+                    </div>
+                    <div style="margin-bottom: 14px;">
+                        <label style="font-size: 13px; color: #666; display: block; margin-bottom: 4px;">手机号 *</label>
+                        <input type="tel" id="applyPagePhone" placeholder="请输入手机号" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; box-sizing: border-box;">
+                    </div>
+                    <div style="margin-bottom: 14px;">
+                        <label style="font-size: 13px; color: #666; display: block; margin-bottom: 4px;">单位名称</label>
+                        <input type="text" id="applyPageCompany" placeholder="请输入单位名称" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; box-sizing: border-box;">
+                    </div>
+                    <div style="margin-bottom: 14px;">
+                        <label style="font-size: 13px; color: #666; display: block; margin-bottom: 4px;">职位</label>
+                        <input type="text" id="applyPagePosition" placeholder="请输入职位" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; box-sizing: border-box;">
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <label style="font-size: 13px; color: #666; display: block; margin-bottom: 4px;">电子邮箱</label>
+                        <input type="email" id="applyPageEmail" placeholder="请输入邮箱地址" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; box-sizing: border-box;">
+                    </div>
+                    <button class="cert-btn primary" style="width: 100%;" onclick="submitPageApply()">确认报名</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-content" id="videosPage" style="display: none;">
+            <div class="top-bar">
+                <div class="back-btn" onclick="closeGridPage()">←</div>
+                <div class="page-title">学习视频</div>
+            </div>
+            <div style="padding: 16px;">
+                <div style="font-size: 14px; color: #666; margin-bottom: 16px;">选择课程视频：</div>
+                <div style="background: white; border-radius: 12px; overflow: hidden;">
+                    <div style="padding: 14px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+                        <div style="display: flex; align-items: center;">
+                            <div style="width: 80px; height: 45px; background: #e6f7ff; border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-right: 12px;">▶</div>
+                            <div>
+                                <div style="font-size: 14px; color: #333;">第1课：基础知识入门</div>
+                                <div style="font-size: 12px; color: #999;">时长：45分钟</div>
+                            </div>
+                        </div>
+                        <span style="color: #1890ff; font-size: 12px;">开始学习</span>
+                    </div>
+                    <div style="padding: 14px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+                        <div style="display: flex; align-items: center;">
+                            <div style="width: 80px; height: 45px; background: #e6f7ff; border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-right: 12px;">▶</div>
+                            <div>
+                                <div style="font-size: 14px; color: #333;">第2课：实操技巧讲解</div>
+                                <div style="font-size: 12px; color: #999;">时长：52分钟</div>
+                            </div>
+                        </div>
+                        <span style="color: #1890ff; font-size: 12px;">开始学习</span>
+                    </div>
+                    <div style="padding: 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+                        <div style="display: flex; align-items: center;">
+                            <div style="width: 80px; height: 45px; background: #e6f7ff; border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-right: 12px;">▶</div>
+                            <div>
+                                <div style="font-size: 14px; color: #333;">第3课：案例分析</div>
+                                <div style="font-size: 12px; color: #999;">时长：38分钟</div>
+                            </div>
+                        </div>
+                        <span style="color: #1890ff; font-size: 12px;">开始学习</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-content" id="reminderPage" style="display: none;">
+            <div class="top-bar">
+                <div class="back-btn" onclick="closeGridPage()">←</div>
+                <div class="page-title">报名提醒</div>
+            </div>
+            <div style="padding: 16px;">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="font-size: 48px; margin-bottom: 12px;">🔔</div>
+                    <div style="font-size: 18px; font-weight: 600; color: #333;">设置报名提醒</div>
+                </div>
+                <div style="background: white; border-radius: 12px; padding: 16px;">
+                    <div style="font-size: 14px; color: #666; margin-bottom: 16px;">请选择提醒方式：</div>
+                    <div style="margin-bottom: 12px; display: flex; align-items: center;">
+                        <input type="checkbox" checked style="width: 18px; height: 18px; margin-right: 10px;">
+                        <span style="font-size: 14px; color: #333;">短信提醒</span>
+                    </div>
+                    <div style="margin-bottom: 12px; display: flex; align-items: center;">
+                        <input type="checkbox" checked style="width: 18px; height: 18px; margin-right: 10px;">
+                        <span style="font-size: 14px; color: #333;">消息推送</span>
+                    </div>
+                    <div style="margin-bottom: 20px; display: flex; align-items: center;">
+                        <input type="checkbox" style="width: 18px; height: 18px; margin-right: 10px;">
+                        <span style="font-size: 14px; color: #333;">邮件提醒</span>
+                    </div>
+                    <button class="cert-btn primary" style="width: 100%;" onclick="submitReminderPage()">设置提醒</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-content" id="nextStudyPage" style="display: none;">
+            <div class="top-bar">
+                <div class="back-btn" onclick="closeGridPage()">←</div>
+                <div class="page-title">下一期学习</div>
+            </div>
+            <div style="padding: 16px;">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="font-size: 48px; margin-bottom: 12px;">🔄</div>
+                    <div style="font-size: 18px; font-weight: 600; color: #333;">下一期学习计划</div>
+                </div>
+                <div style="background: white; border-radius: 12px; padding: 16px;">
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-size: 12px; color: #999; margin-bottom: 2px;">开课时间</div>
+                        <div style="font-size: 16px; color: #333;">2026年7月15日</div>
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-size: 12px; color: #999; margin-bottom: 2px;">课程周期</div>
+                        <div style="font-size: 16px; color: #333;">4周</div>
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-size: 12px; color: #999; margin-bottom: 2px;">报名截止</div>
+                        <div style="font-size: 16px; color: #333;">2026年7月10日</div>
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-size: 12px; color: #999; margin-bottom: 2px;">课程费用</div>
+                        <div style="font-size: 16px; color: #333;">免费</div>
+                    </div>
+                    <button class="cert-btn primary" style="width: 100%;" onclick="submitNextStudy()">立即报名</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-content" id="studyMatesPage" style="display: none;">
+            <div class="top-bar">
+                <div class="back-btn" onclick="closeGridPage()">←</div>
+                <div class="page-title">同期学习</div>
+            </div>
+            <div style="padding: 16px;">
+                <div style="background: white; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-size: 12px; color: #999; margin-bottom: 2px;">班级规模</div>
+                        <div style="font-size: 18px; font-weight: 600; color: #1677ff;">1,234 人</div>
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-size: 12px; color: #999; margin-bottom: 2px;">平均完成度</div>
+                        <div style="font-size: 18px; font-weight: 600; color: #1677ff;">68%</div>
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-size: 12px; color: #999; margin-bottom: 2px;">学习氛围</div>
+                        <div style="font-size: 14px; color: #333;">讨论区活跃度高，学员互动频繁</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 12px; color: #999; margin-bottom: 2px;">学习建议</div>
+                        <div style="font-size: 14px; color: #333;">建议积极参与讨论，与同学共同进步</div>
+                    </div>
+                </div>
+                <button class="cert-btn primary" style="width: 100%;" onclick="closeGridPage()">加入讨论</button>
+            </div>
+        </div>
+        
+        <div class="page-content" id="commentsPage" style="display: none;">
+            <div class="top-bar">
+                <div class="back-btn" onclick="closeGridPage()">←</div>
+                <div class="page-title">课程留言</div>
+            </div>
+            <div style="padding: 16px;">
+                <div style="background: white; border-radius: 12px; padding: 16px; margin-bottom: 16px; max-height: 250px; overflow-y: auto;">
+                    <div style="margin-bottom: 16px;">
+                        <div style="font-size: 12px; color: #999; margin-bottom: 4px;">学员A</div>
+                        <div style="font-size: 14px; color: #333; line-height: 1.5;">课程内容很实用，学到了很多！老师讲解得很清楚，希望能有更多这样的课程。</div>
+                        <div style="font-size: 11px; color: #bbb; margin-top: 4px;">2026-06-28 14:30</div>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <div style="font-size: 12px; color: #999; margin-bottom: 4px;">学员B</div>
+                        <div style="font-size: 14px; color: #333; line-height: 1.5;">老师讲得很清楚，通俗易懂。课程安排合理，知识点覆盖全面。</div>
+                        <div style="font-size: 11px; color: #bbb; margin-top: 4px;">2026-06-28 13:20</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 12px; color: #999; margin-bottom: 4px;">学员C</div>
+                        <div style="font-size: 14px; color: #333; line-height: 1.5;">收获很大，对工作帮助很大！希望能有更多实操案例。</div>
+                        <div style="font-size: 11px; color: #bbb; margin-top: 4px;">2026-06-27 16:45</div>
+                    </div>
+                </div>
+                <textarea id="commentInput" placeholder="输入您的留言..." style="width: 100%; height: 80px; padding: 12px; border: 1px solid #ddd; border-radius: 12px; resize: none; font-size: 14px; box-sizing: border-box;"></textarea>
+                <button class="cert-btn primary" style="width: 100%; margin-top: 12px;" onclick="submitComment()">发布留言</button>
+            </div>
+        </div>
+        
+        <div class="page-content" id="surveyPage" style="display: none;">
+            <div class="top-bar">
+                <div class="back-btn" onclick="closeGridPage()">←</div>
+                <div class="page-title">问卷收集</div>
+            </div>
+            <div style="padding: 16px;">
+                <div style="font-size: 16px; font-weight: 600; color: #333; margin-bottom: 16px;">📋 课程满意度调查</div>
+                <div style="background: white; border-radius: 12px; padding: 16px;">
+                    <div style="margin-bottom: 16px;">
+                        <div style="font-size: 14px; color: #333; margin-bottom: 10px;">1. 您对课程内容的满意度？</div>
+                        <div style="margin-bottom: 8px;"><input type="radio" name="satisfaction" value="5" style="margin-right: 8px;"> 非常满意</div>
+                        <div style="margin-bottom: 8px;"><input type="radio" name="satisfaction" value="4" style="margin-right: 8px;"> 满意</div>
+                        <div style="margin-bottom: 8px;"><input type="radio" name="satisfaction" value="3" style="margin-right: 8px;"> 一般</div>
+                        <div style="margin-bottom: 8px;"><input type="radio" name="satisfaction" value="2" style="margin-right: 8px;"> 不满意</div>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <div style="font-size: 14px; color: #333; margin-bottom: 10px;">2. 您对教学方式的评价？</div>
+                        <div style="margin-bottom: 8px;"><input type="radio" name="teaching" value="5" style="margin-right: 8px;"> 非常好</div>
+                        <div style="margin-bottom: 8px;"><input type="radio" name="teaching" value="4" style="margin-right: 8px;"> 好</div>
+                        <div style="margin-bottom: 8px;"><input type="radio" name="teaching" value="3" style="margin-right: 8px;"> 一般</div>
+                        <div style="margin-bottom: 8px;"><input type="radio" name="teaching" value="2" style="margin-right: 8px;"> 不好</div>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <div style="font-size: 14px; color: #333; margin-bottom: 10px;">3. 您对课程时间安排的评价？</div>
+                        <div style="margin-bottom: 8px;"><input type="radio" name="schedule" value="5" style="margin-right: 8px;"> 非常合理</div>
+                        <div style="margin-bottom: 8px;"><input type="radio" name="schedule" value="4" style="margin-right: 8px;"> 合理</div>
+                        <div style="margin-bottom: 8px;"><input type="radio" name="schedule" value="3" style="margin-right: 8px;"> 一般</div>
+                        <div style="margin-bottom: 8px;"><input type="radio" name="schedule" value="2" style="margin-right: 8px;"> 不合理</div>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <div style="font-size: 14px; color: #333; margin-bottom: 10px;">4. 您的建议</div>
+                        <textarea placeholder="请输入您的建议..." style="width: 100%; height: 60px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; resize: none; font-size: 13px; box-sizing: border-box;"></textarea>
+                    </div>
+                    <button class="cert-btn primary" style="width: 100%;" onclick="submitSurveyPage()">提交问卷</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-content" id="progressPage" style="display: none;">
+            <div class="top-bar">
+                <div class="back-btn" onclick="closeGridPage()">←</div>
+                <div class="page-title">学习进度</div>
+            </div>
+            <div style="padding: 16px;">
+                <div style="background: white; border-radius: 12px; padding: 16px;">
+                    <div style="margin-bottom: 16px;">
+                        <div style="font-size: 12px; color: #999; margin-bottom: 4px;">课程完成度</div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="width: 70%; height: 10px; background: #f0f0f0; border-radius: 5px; overflow: hidden;">
+                                <div style="width: 75%; height: 100%; background: linear-gradient(90deg, #1677ff, #40a9ff); border-radius: 5px;"></div>
+                            </div>
+                            <span style="font-size: 18px; font-weight: 600; color: #1677ff; margin-left: 12px;">75%</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 12px 0; border-top: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 20px; font-weight: 600; color: #333;">15h 30m</div>
+                            <div style="font-size: 12px; color: #999;">学习时长</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 20px; font-weight: 600; color: #333;">15/20</div>
+                            <div style="font-size: 12px; color: #999;">已完成课时</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 20px; font-weight: 600; color: #333;">85分</div>
+                            <div style="font-size: 12px; color: #999;">考试成绩</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding-top: 12px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 20px; font-weight: 600; color: #333;">7天</div>
+                            <div style="font-size: 12px; color: #999;">连续学习</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 20px; font-weight: 600; color: #333;">3次</div>
+                            <div style="font-size: 12px; color: #999;">考试次数</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 20px; font-weight: 600; color: #333;">5篇</div>
+                            <div style="font-size: 12px; color: #999;">学习笔记</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bottom-nav">
+            <a href="投教基地首页.html" class="nav-item">
+                <div class="nav-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#999" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
+                <span>首页</span>
+            </a>
+            <a href="#" class="nav-item active">
+                <div class="nav-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#1677ff" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zM6 20V4h6v6h6v10H6z"/></svg></div>
+                <span>业务</span>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#999" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
+                <span>数据</span>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#999" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+                <span>互动</span>
+            </a>
+            <a href="我的页面.html" class="nav-item">
+                <div class="nav-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#999" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
+                <span>我的</span>
+            </a>
+        </div>
+        
+        <div id="applyModal" class="modal-overlay">
+            <div class="modal-content" style="max-width: 340px;">
+                <span class="modal-close" onclick="closeApplyModal()">×</span>
+                <div class="modal-title">课程报名</div>
+                <div style="font-size: 14px; color: #666; margin-bottom: 16px;">您正在报名：<span style="color: #1677ff; font-weight: 600;" id="applyCourseName"></span></div>
+                
+                <div style="margin-bottom: 12px;">
+                    <label style="font-size: 13px; color: #666; display: block; margin-bottom: 4px;">姓名 *</label>
+                    <input type="text" id="applyName" placeholder="请输入您的姓名" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; box-sizing: border-box;">
+                </div>
+                
+                <div style="margin-bottom: 12px;">
+                    <label style="font-size: 13px; color: #666; display: block; margin-bottom: 4px;">手机号 *</label>
+                    <input type="tel" id="applyPhone" placeholder="请输入手机号" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; box-sizing: border-box;">
+                </div>
+                
+                <div style="margin-bottom: 12px;">
+                    <label style="font-size: 13px; color: #666; display: block; margin-bottom: 4px;">单位名称</label>
+                    <input type="text" id="applyCompany" placeholder="请输入单位名称" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; box-sizing: border-box;">
+                </div>
+                
+                <div style="margin-bottom: 12px;">
+                    <label style="font-size: 13px; color: #666; display: block; margin-bottom: 4px;">职位</label>
+                    <input type="text" id="applyPosition" placeholder="请输入职位" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; box-sizing: border-box;">
+                </div>
+                
+                <div style="margin-bottom: 16px;">
+                    <label style="font-size: 13px; color: #666; display: block; margin-bottom: 4px;">电子邮箱</label>
+                    <input type="email" id="applyEmail" placeholder="请输入邮箱地址" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; box-sizing: border-box;">
+                </div>
+                
+                <button class="modal-btn primary" onclick="submitApply()">确认报名</button>
+                <button class="modal-btn secondary" onclick="closeApplyModal()">取消</button>
+            </div>
+        </div>
+        
+        <div id="successModal" class="modal-overlay">
+            <div class="modal-content">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="font-size: 48px; margin-bottom: 12px;">✅</div>
+                    <div class="modal-title">操作成功</div>
+                </div>
+                <button class="modal-btn primary" onclick="closeSuccessModal()">确定</button>
+            </div>
+        </div>
+        
+        <div id="gridModal" class="modal-overlay">
+            <div class="modal-content">
+                <span class="modal-close" onclick="closeGridModal()">×</span>
+                <div class="modal-title" id="gridModalTitle">功能详情</div>
+                <div id="gridModalContent" style="font-size: 14px; color: #666; line-height: 1.6;"></div>
+                <div id="gridModalActions" style="margin-top: 16px;"></div>
+            </div>
+        </div>
+        
+        <div id="certModal" class="modal-overlay">
+            <div class="cert-modal-content">
+                <span class="modal-close" onclick="closeCertModal()">×</span>
+                <div class="cert-body">
+                    <div class="cert-lace-border">
+                        <div class="cert-inner">
+                            <div class="cert-corner-decoration top-left"></div>
+                            <div class="cert-corner-decoration top-right"></div>
+                            <div class="cert-corner-decoration bottom-left"></div>
+                            <div class="cert-corner-decoration bottom-right"></div>
+                            <div class="cert-content">
+                                <div class="cert-logo"><img src="logo-111.png" alt="Logo"></div>
+                                <div class="cert-title">荣誉证书</div>
+                                <div class="cert-subtitle">CERTIFICATE OF ACHIEVEMENT</div>
+                                <div class="cert-info-section">
+                                    <div class="cert-info-box">
+                                        <div class="cert-info-label">姓名</div>
+                                        <div class="cert-info-value highlight" id="certName">学员</div>
+                                    </div>
+                                    <div class="cert-course-box">
+                                        <div class="cert-course-label">证书名称</div>
+                                        <div class="cert-course-value" id="certCourse">投资者教育基础证书</div>
+                                    </div>
+                                </div>
+                                <div class="cert-comment-section">
+                                    <div class="cert-comment-text">该学员已完成本课程全部学习内容，考核成绩优秀，特发此证。</div>
+                                </div>
+                                <div class="cert-conditions-section">
+                                    <div class="cert-conditions-title">获取条件</div>
+                                    <div class="cert-conditions-text">完成全部课程学习，考核成绩达到60分以上</div>
+                                </div>
+                                <div class="cert-footer-section">
+                                    <div class="cert-qrcode-area">
+                                        <div class="cert-qrcode"><img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=DCE-2026-XXXXX" alt="二维码"></div>
+                                        <div class="cert-number">DCE202605252387</div>
+                                    </div>
+                                    <div class="cert-seal-area">
+                                        <div class="cert-seal">严绍明</div>
+                                        <div class="cert-signer">签名</div>
+                                    </div>
+                                </div>
+                                <div class="cert-date" id="certDate">2026年5月25日</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="padding: 8px 12px;">
+                    <div class="cert-actions-section">
+                        <button class="cert-action-btn red" onclick="downloadPDF()">下载PDF</button>
+                        <button class="cert-action-btn cyan" onclick="downloadImage()">下载图片</button>
+                        <button class="cert-action-btn green" onclick="shareMoments()">分享朋友圈</button>
+                        <button class="cert-action-btn blue" onclick="shareWeChat()">分享微信</button>
+                    </div>
+                    <button class="cert-close-btn" onclick="closeCertModal()">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        var certData = {
+            '结算专员证书': { 
+                desc: '完成结算业务培训课程，掌握结算流程与操作规范', 
+                hours: 12, exams: 3, courses: 5,
+                courseList: [
+                    { name: '结算基础知识', status: 'completed', progress: 100 },
+                    { name: '结算流程实务', status: 'completed', progress: 100 },
+                    { name: '风险管理', status: 'completed', progress: 100 },
+                    { name: '资金管理', status: 'completed', progress: 100 },
+                    { name: '高级结算技术', status: 'learning', progress: 60 }
+                ],
+                expired: false
+            },
+            '期权交易师证书': { 
+                desc: '掌握期权交易策略与应用，深入理解衍生品市场', 
+                hours: 20, exams: 2, courses: 4,
+                courseList: [
+                    { name: '期权基础概念', status: 'completed', progress: 100 },
+                    { name: '期权定价模型', status: 'completed', progress: 100 },
+                    { name: '交易策略分析', status: 'learning', progress: 80 },
+                    { name: '实战案例演练', status: 'not-started', progress: 0 }
+                ],
+                expired: false
+            },
+            '风控专员证书': { 
+                desc: '风险控制与合规管理培训，提升风险管理能力', 
+                hours: 16, exams: 3, courses: 5,
+                courseList: [
+                    { name: '风控体系建设', status: 'not-started', progress: 0 },
+                    { name: '风险识别与评估', status: 'not-started', progress: 0 },
+                    { name: '合规管理规范', status: 'not-started', progress: 0 },
+                    { name: '风险处置实务', status: 'not-started', progress: 0 },
+                    { name: '风险监测系统', status: 'not-started', progress: 0 }
+                ],
+                expired: false
+            },
+            '期货分析师证书': { 
+                desc: '市场分析与研究方法，培养专业分析能力', 
+                hours: 24, exams: 4, courses: 6,
+                courseList: [
+                    { name: '宏观经济分析', status: 'not-started', progress: 0 },
+                    { name: '产业链研究', status: 'not-started', progress: 0 },
+                    { name: '技术分析方法', status: 'not-started', progress: 0 },
+                    { name: '基本面分析', status: 'not-started', progress: 0 },
+                    { name: '量化分析工具', status: 'not-started', progress: 0 },
+                    { name: '研究报告撰写', status: 'not-started', progress: 0 }
+                ],
+                expired: false
+            },
+            '投资者教育讲师证书': { 
+                desc: '投教课程设计与讲授技巧，提升授课能力', 
+                hours: 12, exams: 2, courses: 4,
+                courseList: [
+                    { name: '投教课程设计', status: 'not-started', progress: 0 },
+                    { name: '讲授技巧培训', status: 'not-started', progress: 0 },
+                    { name: '互动教学方法', status: 'not-started', progress: 0 },
+                    { name: '课程评估体系', status: 'not-started', progress: 0 }
+                ],
+                expired: false
+            },
+            '投资者教育基础证书': { 
+                desc: '基础课程学习完成，了解期货市场基础知识', 
+                hours: 8, exams: 1, courses: 2,
+                courseList: [
+                    { name: '期货市场入门', status: 'completed', progress: 100 },
+                    { name: '交易规则与制度', status: 'completed', progress: 100 }
+                ],
+                expired: false
+            },
+            '期权基础知识证书': { 
+                desc: '期权入门培训课程，了解期权基本概念', 
+                hours: 10, exams: 1, courses: 3,
+                courseList: [
+                    { name: '期权基本概念', status: 'completed', progress: 100 },
+                    { name: '期权交易策略', status: 'completed', progress: 100 },
+                    { name: '风险控制要点', status: 'completed', progress: 100 }
+                ],
+                expired: true
+            },
+            '期货市场基础知识': { 
+                desc: '免费课程，直接开始学习，了解期货市场基础概念', 
+                hours: 8, exams: 2, courses: 4,
+                courseList: [
+                    { name: '期货市场起源', status: 'not-started', progress: 0 },
+                    { name: '交易品种介绍', status: 'not-started', progress: 0 },
+                    { name: '交易规则详解', status: 'not-started', progress: 0 },
+                    { name: '风险提示', status: 'not-started', progress: 0 }
+                ],
+                expired: false
+            },
+            '投资者权益保护': { 
+                desc: '免费课程，了解投资者权益，提高自我保护意识', 
+                hours: 6, exams: 1, courses: 3,
+                courseList: [
+                    { name: '投资者权利义务', status: 'not-started', progress: 0 },
+                    { name: '投诉维权渠道', status: 'not-started', progress: 0 },
+                    { name: '风险防范措施', status: 'not-started', progress: 0 }
+                ],
+                expired: false
+            }
+        };
+        
+        function goBack() { window.history.back(); }
+        
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.section-container').forEach(s => s.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tab + 'Section').classList.add('active');
+        }
+        
+        function openDetail(certName) {
+            var data = certData[certName] || {};
+            document.getElementById('detailCertName').textContent = certName;
+            document.getElementById('detailTitle').textContent = certName;
+            document.getElementById('detailDesc').textContent = data.desc || '证书详情';
+            document.getElementById('detailHours').textContent = data.hours || '0';
+            document.getElementById('detailExams').textContent = data.exams || '0';
+            document.getElementById('detailCourses').textContent = data.courses || '0';
+            
+            toggleNextStudy(data.expired);
+            
+            document.getElementById('mainPage').style.display = 'none';
+            document.getElementById('detailPage').classList.add('active');
+            
+            document.querySelectorAll('.page-content').forEach(page => {
+                if(page.id !== 'detailPage') page.style.display = 'none';
+            });
+        }
+        
+        function renderCourseList(courseList) {
+            var container = document.getElementById('courseListContainer');
+            container.innerHTML = '';
+            
+            if (courseList.length === 0) {
+                container.innerHTML = '<div style="padding: 20px; text-align: center; color: #999;">暂无课程信息</div>';
+                return;
+            }
+            
+            document.getElementById('courseCount').textContent = courseList.length + '门';
+            
+            courseList.forEach(function(course) {
+                var item = document.createElement('div');
+                item.className = 'detail-course-item';
+                
+                var statusText = '';
+                var statusClass = '';
+                var iconBg = '#f5f7fa';
+                var icon = '📄';
+                
+                switch(course.status) {
+                    case 'completed':
+                        statusText = '已完成';
+                        statusClass = 'completed';
+                        iconBg = '#f6ffed';
+                        icon = '✓';
+                        break;
+                    case 'learning':
+                        statusText = '学习中';
+                        statusClass = 'learning';
+                        iconBg = '#e6f7ff';
+                        icon = '📖';
+                        break;
+                    default:
+                        statusText = '未开始';
+                        statusClass = 'not-started';
+                        iconBg = '#f5f7fa';
+                        icon = '📋';
+                }
+                
+                item.innerHTML = `
+                    <div class="detail-course-icon" style="background: ${iconBg};">${icon}</div>
+                    <div class="detail-course-info">
+                        <div class="detail-course-name">${course.name}</div>
+                        <div class="detail-course-status ${statusClass}">${statusText}</div>
+                    </div>
+                    <div class="detail-course-progress">
+                        <div class="detail-course-progress-fill" style="width: ${course.progress}%;"></div>
+                    </div>
+                    <div class="detail-course-percent">${course.progress}%</div>
+                `;
+                
+                item.onclick = function() {
+                    if (course.status === 'not-started') {
+                        showApplyModal(certName);
+                    } else {
+                        alert('正在进入课程学习...');
+                    }
+                };
+                
+                container.appendChild(item);
+            });
+        }
+        
+        function toggleNextStudy(show) {
+            var nextStudyItem = document.getElementById('nextStudyItem');
+            if (nextStudyItem) {
+                nextStudyItem.style.display = show ? 'block' : 'none';
+            }
+        }
+        
+        function closeDetail() {
+            document.getElementById('detailPage').classList.remove('active');
+            document.getElementById('mainPage').style.display = 'block';
+        }
+        
+        function openGridPage(pageId) {
+            document.getElementById('detailPage').classList.remove('active');
+            document.getElementById(pageId + 'Page').style.display = 'block';
+            
+            if(pageId === 'apply') {
+                document.getElementById('applyPageCourseName').textContent = document.getElementById('detailCertName').textContent;
+            }
+        }
+        
+        function closeGridPage() {
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.style.display = 'none';
+            });
+            document.getElementById('detailPage').classList.add('active');
+        }
+        
+        function submitPageApply() {
+            var name = document.getElementById('applyPageName').value;
+            var phone = document.getElementById('applyPagePhone').value;
+            
+            if (!name.trim()) {
+                alert('请输入姓名');
+                return;
+            }
+            
+            if (!phone.trim()) {
+                alert('请输入手机号');
+                return;
+            }
+            
+            if (!/^1[3-9]\d{9}$/.test(phone)) {
+                alert('请输入正确的手机号');
+                return;
+            }
+            
+            closeGridPage();
+            document.getElementById('successModal').classList.add('show');
+        }
+        
+        function submitReminderPage() {
+            alert('报名提醒设置成功！');
+        }
+        
+        function submitNextStudy() {
+            alert('已成功报名下一期课程！');
+        }
+        
+        function submitSurveyPage() {
+            alert('问卷提交成功，感谢您的反馈！');
+        }
+        
+        function submitComment() {
+            var input = document.getElementById('commentInput');
+            if (!input.value.trim()) {
+                alert('请输入留言内容');
+                return;
+            }
+            alert('留言发布成功！');
+            input.value = '';
+        }
+        
+        function showApplyModal(certName) {
+            document.getElementById('applyCourseName').textContent = certName;
+            document.getElementById('applyModal').classList.add('show');
+        }
+        
+        function closeApplyModal() {
+            document.getElementById('applyModal').classList.remove('show');
+        }
+        
+        function submitApply() {
+            var name = document.getElementById('applyName').value;
+            var phone = document.getElementById('applyPhone').value;
+            
+            if (!name.trim()) {
+                alert('请输入姓名');
+                return;
+            }
+            
+            if (!phone.trim()) {
+                alert('请输入手机号');
+                return;
+            }
+            
+            if (!/^1[3-9]\d{9}$/.test(phone)) {
+                alert('请输入正确的手机号');
+                return;
+            }
+            
+            closeApplyModal();
+            document.getElementById('successModal').classList.add('show');
+        }
+        
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.remove('show');
+        }
+        
+        function shareCourse() {
+            alert('分享功能已触发！');
+        }
+        
+        function showCertModal(certName) {
+            document.getElementById('certCourse').textContent = certName;
+            document.getElementById('certModal').classList.add('show');
+        }
+        
+        function closeCertModal() {
+            document.getElementById('certModal').classList.remove('show');
+        }
+        
+        function downloadPDF() { alert('PDF证书已下载'); }
+        function downloadImage() { alert('图片证书已下载'); }
+        function shareMoments() { alert('分享到朋友圈'); }
+        function shareWeChat() { alert('分享到微信'); }
+    </script>
+</body>
+</html>
