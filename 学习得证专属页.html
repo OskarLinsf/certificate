@@ -10,7 +10,7 @@
         .phone-container { width: 320px; height: 812px; background: white; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; position: relative; display: flex; flex-direction: column; }
         
         @media (max-width: 430px) {
-            body { background: white; padding: 0; margin: 0; }
+            body { background: white; padding: 0; margin: 0; display: block; justify-content: initial; align-items: initial; }
             .phone-container { width: 100%; height: 100vh; max-width: 100%; box-shadow: none; }
         }
         .page-content { flex: 1; overflow-y: auto; background: #f5f7fa; scrollbar-width: none; }
@@ -82,11 +82,12 @@
         .detail-progress-value { font-size: 24px; font-weight: bold; }
         .detail-progress-label { font-size: 11px; opacity: 0.8; }
         
-        .grid-container { padding: 16px; }
-        .grid-9 { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(4, 1fr); gap: 12px; }
-        .grid-item { background: white; border-radius: 12px; padding: 16px 8px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04); cursor: pointer; transition: all 0.2s; }
+        .grid-container { padding: 12px; }
+        .grid-9 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .grid-item { background: white; border-radius: 10px; padding: 10px 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.04); cursor: pointer; transition: all 0.2s; }
         .grid-item:active { transform: scale(0.95); }
-        .grid-icon { width: 40px; height: 40px; border-radius: 10px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .grid-icon { width: 32px; height: 32px; border-radius: 8px; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .grid-text { font-size: 11px; color: #333; }
         .grid-icon.blue { background: #e6f7ff; color: #1890ff; }
         .grid-icon.green { background: #f6ffed; color: #52c41a; }
         .grid-icon.orange { background: #fff7e6; color: #fa8c16; }
@@ -116,9 +117,9 @@
         .detail-course-progress-fill { height: 100%; background: linear-gradient(90deg, #1677ff, #40a9ff); border-radius: 2px; }
         .detail-course-percent { font-size: 11px; color: #999; width: 32px; text-align: right; }
         
-        .float-share-btn { position: fixed; bottom: 70px; right: 20px; width: 48px; height: 48px; background: linear-gradient(135deg, #1677ff, #40a9ff); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 22px; box-shadow: 0 4px 12px rgba(22,119,255,0.4); z-index: 9999; cursor: pointer; }
+        .float-share-btn { width: 48px; height: 48px; background: linear-gradient(135deg, #1677ff, #40a9ff); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 22px; box-shadow: 0 4px 12px rgba(22,119,255,0.4); cursor: pointer; margin: 20px auto; }
         
-        .bottom-nav { background: white; display: flex; justify-content: space-around; padding: 6px 0; padding-bottom: calc(6px + env(safe-area-inset-bottom)); border-top: 1px solid #f0f0f0; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); z-index: 10001; height: auto; min-height: 50px; flex-shrink: 0; }
+        .bottom-nav { background: white; display: flex; padding: 6px 0; padding-bottom: calc(6px + env(safe-area-inset-bottom)); flex-shrink: 0; width: 100%; box-sizing: border-box; }
         .full-page { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #f5f7fa; display: none; flex-direction: column; z-index: 10002; }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #999; text-decoration: none; font-size: 11px; }
         .nav-item.active { color: #1677ff; }
@@ -259,46 +260,6 @@
                     <button class="cert-btn secondary" onclick="event.stopPropagation(); showApplyModal('风控专员证书')">立即报名</button>
                 </div>
                 
-                <div class="cert-card" onclick="openDetail('期货分析师证书')">
-                    <div class="cert-header">
-                        <div class="cert-icon" style="background: linear-gradient(135deg, #eb2f96, #ff729f); color: white;">🔍</div>
-                        <div class="cert-info">
-                            <div class="cert-name">期货分析师证书</div>
-                            <div class="cert-desc">市场分析与研究方法</div>
-                        </div>
-                        <div class="cert-status not-started">未报名</div>
-                    </div>
-                    <div class="progress-section">
-                        <div class="progress-title">课程信息</div>
-                        <div class="progress-grid">
-                            <div class="progress-item"><div class="progress-value">24</div><div class="progress-label">课时</div></div>
-                            <div class="progress-item"><div class="progress-value">4</div><div class="progress-label">考试</div></div>
-                            <div class="progress-item"><div class="progress-value">6</div><div class="progress-label">课程</div></div>
-                        </div>
-                    </div>
-                    <button class="cert-btn secondary" onclick="event.stopPropagation(); showApplyModal('期货分析师证书')">立即报名</button>
-                </div>
-                
-                <div class="cert-card" onclick="openDetail('投资者教育讲师证书')">
-                    <div class="cert-header">
-                        <div class="cert-icon" style="background: linear-gradient(135deg, #13c2c2, #36cfc9); color: white;">🎓</div>
-                        <div class="cert-info">
-                            <div class="cert-name">投资者教育讲师证书</div>
-                            <div class="cert-desc">投教课程设计与讲授技巧</div>
-                        </div>
-                        <div class="cert-status not-started">未报名</div>
-                    </div>
-                    <div class="progress-section">
-                        <div class="progress-title">课程信息</div>
-                        <div class="progress-grid">
-                            <div class="progress-item"><div class="progress-value">12</div><div class="progress-label">课时</div></div>
-                            <div class="progress-item"><div class="progress-value">2</div><div class="progress-label">考试</div></div>
-                            <div class="progress-item"><div class="progress-value">4</div><div class="progress-label">课程</div></div>
-                        </div>
-                    </div>
-                    <button class="cert-btn secondary" onclick="event.stopPropagation(); showApplyModal('投资者教育讲师证书')">立即报名</button>
-                </div>
-                
                 <div class="cert-card" onclick="openDetail('期货市场基础知识')">
                     <div class="cert-header">
                         <div class="cert-icon" style="background: linear-gradient(135deg, #52c41a, #73d13d); color: white;">🌱</div>
@@ -345,6 +306,8 @@
                     <button class="cert-btn primary" onclick="openDetail('期权基础知识证书')">报名下一期</button>
                 </div>
             </div>
+            
+            <div class="float-share-btn" onclick="shareCourse()">🔗</div>
         </div>
         
         <div class="page-content detail-page" id="detailPage">
@@ -382,21 +345,25 @@
                         <div class="grid-icon green">📥</div>
                         <div class="grid-text">材料获取</div>
                     </div>
-                    <div class="grid-item" onclick="openGridPage('apply')">
-                        <div class="grid-icon orange">📝</div>
-                        <div class="grid-text">学习报名</div>
-                    </div>
                     <div class="grid-item" onclick="openGridPage('videos')">
                         <div class="grid-icon purple">🎬</div>
                         <div class="grid-text">学习视频</div>
                     </div>
-                    <div class="grid-item" onclick="openGridPage('reminder')">
+                    <div class="grid-item" id="gridReminder" onclick="openGridPage('reminder')">
                         <div class="grid-icon red">🔔</div>
                         <div class="grid-text">报名提醒</div>
                     </div>
-                    <div class="grid-item" id="nextStudyItem" style="display: none;" onclick="openGridPage('nextStudy')">
-                        <div class="grid-icon cyan">🔄</div>
-                        <div class="grid-text">下一期学习</div>
+                    <div class="grid-item" id="gridApply" onclick="openGridPage('apply')">
+                        <div class="grid-icon orange">📝</div>
+                        <div class="grid-text">学习报名</div>
+                    </div>
+                    <div class="grid-item" id="gridSurvey" onclick="openGridPage('survey')">
+                        <div class="grid-icon green">📋</div>
+                        <div class="grid-text">问卷收集</div>
+                    </div>
+                    <div class="grid-item" id="gridCert" onclick="openGridPage('cert')">
+                        <div class="grid-icon blue">🎓</div>
+                        <div class="grid-text">证书</div>
                     </div>
                     <div class="grid-item" onclick="openGridPage('studyMates')">
                         <div class="grid-icon yellow">📚</div>
@@ -406,19 +373,10 @@
                         <div class="grid-icon pink">💬</div>
                         <div class="grid-text">课程留言</div>
                     </div>
-                    <div class="grid-item" onclick="openGridPage('survey')">
-                        <div class="grid-icon green">📋</div>
-                        <div class="grid-text">问卷收集</div>
-                    </div>
-                    <div class="grid-item" onclick="openGridPage('progress')">
-                        <div class="grid-icon blue">📊</div>
-                        <div class="grid-text">学习进度</div>
-                    </div>
                 </div>
             </div>
             
-            <div class="float-share-btn" onclick="shareCourse()">🔗</div>
-        </div>
+            </div>
         
         <div class="full-page" id="courseIntroPage" style="display: none;">
             <div class="top-bar">
@@ -443,10 +401,10 @@
                 </div>
                 <div style="font-size: 16px; font-weight: 600; color: #333; margin-bottom: 12px;">📜 证书准入条件</div>
                 <div style="font-size: 14px; color: #666; line-height: 1.6;">
-                    <div style="margin-bottom: 8px;">• 完成全部课程学习并通过考核</div>
-                    <div style="margin-bottom: 8px;">• 通过相关知识测试</div>
-                    <div style="margin-bottom: 8px;">• 符合平台规定的学习时长要求</div>
-                    <div>• 遵守学习平台相关规定</div>
+                    <div style="margin-bottom: 8px;">• 完成全部课程学习，课程进度达到100%</div>
+                    <div style="margin-bottom: 8px;">• 通过知识测试，成绩≥80分</div>
+                    <div style="margin-bottom: 8px;">• 累计学习时长≥20小时</div>
+                    <div>• 无违规记录，遵守学习平台相关规定</div>
                 </div>
             </div>
         </div>
@@ -1014,7 +972,9 @@
         
         function goBack() { window.history.back(); }
         
+        var currentTab = 'learning';
         function switchTab(tab) {
+            currentTab = tab;
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.section-container').forEach(s => s.classList.remove('active'));
             event.target.classList.add('active');
@@ -1031,6 +991,23 @@
             document.getElementById('detailCourses').textContent = data.courses || '0';
             
             toggleNextStudy(data.expired);
+            
+            if (currentTab === 'learning') {
+                document.getElementById('gridReminder').style.display = 'none';
+                document.getElementById('gridApply').style.display = 'none';
+                document.getElementById('gridSurvey').style.display = 'flex';
+                document.getElementById('gridCert').style.display = 'none';
+            } else if (currentTab === 'notRegistered') {
+                document.getElementById('gridReminder').style.display = 'none';
+                document.getElementById('gridApply').style.display = 'flex';
+                document.getElementById('gridSurvey').style.display = 'none';
+                document.getElementById('gridCert').style.display = 'none';
+            } else {
+                document.getElementById('gridReminder').style.display = 'none';
+                document.getElementById('gridApply').style.display = 'none';
+                document.getElementById('gridSurvey').style.display = 'none';
+                document.getElementById('gridCert').style.display = 'none';
+            }
             
             document.getElementById('mainPage').style.display = 'none';
             document.getElementById('detailPage').classList.add('active');
