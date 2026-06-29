@@ -6,8 +6,13 @@
     <title>学习得证 - 大商所投教精品</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
-        body { background: white; min-height: 100vh; margin: 0; padding: 0; overflow: hidden; }
-        .phone-container { width: 100%; height: 100vh; max-width: 100%; background: white; overflow: hidden; position: relative; display: flex; flex-direction: column; }
+        body { background: #e0e0e0; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; overflow: hidden; }
+        .phone-container { width: 320px; height: 812px; background: white; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; position: relative; display: flex; flex-direction: column; }
+        
+        @media (max-width: 430px) {
+            body { background: white; padding: 0; margin: 0; }
+            .phone-container { width: 100%; height: 100vh; max-width: 100%; box-shadow: none; }
+        }
         .page-content { flex: 1; overflow-y: auto; background: #f5f7fa; scrollbar-width: none; padding-bottom: 60px; }
         .page-content::-webkit-scrollbar { display: none; }
         
@@ -394,8 +399,8 @@
                         <div class="grid-text">下一期学习</div>
                     </div>
                     <div class="grid-item" onclick="openGridPage('studyMates')">
-                        <div class="grid-icon yellow">👥</div>
-                        <div class="grid-text">同期学习</div>
+                        <div class="grid-icon yellow">📚</div>
+                        <div class="grid-text">其他相关证书课程</div>
                     </div>
                     <div class="grid-item" onclick="openGridPage('comments')">
                         <div class="grid-icon pink">💬</div>
@@ -430,11 +435,18 @@
                     相关从业者、学习者以及对本领域感兴趣的用户，无论您是初入行业的新人还是经验丰富的专业人士，都能从中获益。
                 </div>
                 <div style="font-size: 16px; font-weight: 600; color: #333; margin-bottom: 12px;">🎯 学习收获</div>
-                <div style="font-size: 14px; color: #666; line-height: 1.6;">
+                <div style="font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 16px;">
                     <div style="margin-bottom: 8px;">• 掌握核心理论知识和实践技能</div>
                     <div style="margin-bottom: 8px;">• 提升专业素养和综合能力</div>
                     <div style="margin-bottom: 8px;">• 获取权威认证证书</div>
                     <div>• 拓展职业发展空间</div>
+                </div>
+                <div style="font-size: 16px; font-weight: 600; color: #333; margin-bottom: 12px;">📜 证书准入条件</div>
+                <div style="font-size: 14px; color: #666; line-height: 1.6;">
+                    <div style="margin-bottom: 8px;">• 完成全部课程学习并通过考核</div>
+                    <div style="margin-bottom: 8px;">• 通过相关知识测试</div>
+                    <div style="margin-bottom: 8px;">• 符合平台规定的学习时长要求</div>
+                    <div>• 遵守学习平台相关规定</div>
                 </div>
             </div>
         </div>
@@ -621,7 +633,7 @@
         <div class="full-page" id="studyMatesPage" style="display: none;">
             <div class="top-bar">
                 <div class="back-btn" onclick="closeGridPage()">←</div>
-                <div class="page-title">同期学习</div>
+                <div class="page-title">其他相关证书课程</div>
             </div>
             <div style="flex: 1; overflow-y: auto; padding: 16px;">
                 <div style="background: white; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
@@ -1119,6 +1131,7 @@
             document.querySelectorAll('.full-page').forEach(page => {
                 page.style.display = 'none';
             });
+            document.getElementById('mainPage').style.display = 'none';
             document.getElementById('detailPage').classList.add('active');
             document.getElementById('detailPage').style.display = 'block';
         }

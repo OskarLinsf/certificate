@@ -7,17 +7,40 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #f5f7fa;
+            background: #e0e0e0;
             font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
             -webkit-font-smoothing: antialiased;
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
         }
         .app-container {
-            width: 100%;
-            max-width: 430px;
-            margin: 0 auto;
+            width: 320px;
+            height: 812px;
+            background: white;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             min-height: 100vh;
             position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        @media (max-width: 430px) {
+            body {
+                background: #f5f7fa;
+                padding: 0;
+                margin: 0;
+            }
+            .app-container {
+                width: 100%;
+                height: 100vh;
+                max-width: 100%;
+                box-shadow: none;
+            }
         }
 
         /* 顶部蓝色导航栏 */
