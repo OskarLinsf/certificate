@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的证书</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+            background: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+        .phone-container {
+            width: 320px;
+            height: 812px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(180deg, #1a3a6e 0%, #2a5298 30%, #e8f0fe 45%, #f5f7fa 60%);
+        }
+        
+        @media (max-width: 430px) {
+            body {
+                background: linear-gradient(180deg, #1a3a6e 0%, #2a5298 30%, #e8f0fe 45%, #f5f7fa 60%);
+                padding: 0;
+                margin: 0;
+            }
+            .phone-container {
+                width: 100%;
+                height: 100vh;
+                max-width: 100%;
+                box-shadow: none;
+            }
+        }
+        .page-content {
+            flex: 1;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+        .page-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* 状态栏 */
+        .status-bar {
+            background: linear-gradient(135deg, #1a3a6e, #2a5298);
+            padding: 44px 20px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .status-time { font-size: 15px; font-weight: 600; color: #fff; }
+        .status-icons { display: flex; gap: 4px; font-size: 13px; color: #fff; }
+
+        /* 导航栏 */
+        .nav-bar {
+            background: linear-gradient(135deg, #1a3a6e, #2a5298);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .nav-back {
+            color: #fff;
+            font-size: 22px;
+            text-decoration: none;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .nav-title {
+            color: #fff;
+            font-size: 18px;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+            margin-right: 32px;
+        }
+
+        /* 底部导航 */
+        .bottom-nav {
+            height: auto;
+            min-height: 50px;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            padding-bottom: calc(6px + env(safe-area-inset-bottom));
+            border-top: 1px solid #e5e7eb;
+            z-index: 10001;
+            flex-shrink: 0;
+        }
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #999;
+            text-decoration: none;
+            font-size: 11px;
+            transition: color 0.2s;
+        }
+        .nav-item.active {
+            color: #1677ff;
+        }
+        .nav-item .nav-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .nav-item.active svg path {
+            fill: #1677ff;
+        }
+
+        /* 分类标签栏 */
+        .category-tabs {
+            display: flex;
+            gap: 4px;
+            margin: 0 14px 12px;
+            background: transparent;
+        }
+        .category-tab {
+            flex: 1;
+            padding: 8px 6px;
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            background: rgba(255,255,255,0.85);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            border: 1px solid transparent;
+        }
+        .category-tab:hover {
+            color: #333;
+            background: rgba(255,255,255,1);
+            border-color: rgba(0,0,0,0.05);
+        }
+        .category-tab.active {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: #fff;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(255,107,53,0.3);
+            border-color: rgba(255,107,53,0.3);
+        }
+
+        /* 证书列表 */
+        .cert-list {
+            padding: 0 14px 80px;
+        }
+        .cert-card {
+            background: #fff;
+            border-radius: 14px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .cert-card:active {
+            transform: scale(0.98);
+        }
+        .cert-card-top {
+            display: flex;
+            padding: 16px;
+            gap: 14px;
+            align-items: center;
+        }
+        .cert-badge {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .cert-badge.gold {
+            background: linear-gradient(135deg, #f7d26b, #e8a838);
+        }
+        .cert-badge.silver {
+            background: linear-gradient(135deg, #c0c7d0, #8e99a4);
+        }
+        .cert-badge.blue {
+            background: linear-gradient(135deg, #5b9bf7, #2a6dd4);
+        }
+        .cert-badge-icon {
+            font-size: 28px;
+        }
+        .cert-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .cert-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .cert-meta {
+            font-size: 12px;
+            color: #999;
+            display: flex;
+            gap: 12px;
+        }
+        .cert-arrow {
+            color: #ccc;
+            font-size: 18px;
+            align-self: center;
+        }
+        .cert-card-bottom {
+            display: flex;
+            border-top: 1px solid #f5f5f5;
+            padding: 10px 16px;
+            gap: 0;
+        }
+        .cert-detail-item {
+            flex: 1;
+            text-align: center;
+            border-right: 1px solid #f5f5f5;
+        }
+        .cert-detail-item:last-child {
+            border-right: none;
+        }
+        .cert-detail-label {
+            font-size: 11px;
+            color: #bbb;
+            margin-bottom: 2px;
+        }
+        .cert-detail-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+        .cert-detail-value.score {
+            color: #e8a838;
+        }
+
+        /* 证书详情弹窗 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            backdrop-filter: none;
+        }
+        .modal-overlay.show {
+            display: flex;
+        }
+        .cert-modal {
+            width: 100%;
+            max-width: 360px;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            animation: modalIn 0.4s ease;
+            position: relative;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+        @keyframes modalIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .cert-body {
+            background: #fff;
+            padding: 16px;
+            height: auto;
+        }
+        .cert-lace-border {
+            padding: 12px;
+            background: 
+                radial-gradient(circle at 10px 10px, rgba(196,149,106,0.08) 2px, transparent 2.5px),
+                radial-gradient(circle at 90px 20px, rgba(196,149,106,0.06) 1.5px, transparent 2px),
+                radial-gradient(circle at 170px 10px, rgba(196,149,106,0.08) 2px, transparent 2.5px),
+                radial-gradient(circle at 260px 20px, rgba(196,149,106,0.06) 1.5px, transparent 2px),
+                radial-gradient(circle at 10px 80px, rgba(196,149,106,0.06) 1.5px, transparent 2px),
+                radial-gradient(circle at 90px 70px, rgba(196,149,106,0.08) 2px, transparent 2.5px),
+                radial-gradient(circle at 170px 80px, rgba(196,149,106,0.06) 1.5px, transparent 2px),
+                radial-gradient(circle at 260px 70px, rgba(196,149,106,0.08) 2px, transparent 2.5px),
+                radial-gradient(circle at 50px 140px, rgba(196,149,106,0.07) 1.8px, transparent 2.3px),
+                radial-gradient(circle at 130px 130px, rgba(196,149,106,0.09) 2.2px, transparent 2.7px),
+                radial-gradient(circle at 210px 140px, rgba(196,149,106,0.07) 1.8px, transparent 2.3px),
+                radial-gradient(circle at 290px 130px, rgba(196,149,106,0.09) 2.2px, transparent 2.7px),
+                linear-gradient(135deg, #faf8f3 0%, #fff 100%);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+            border-radius: 4px;
+            border: 1px solid #e8dcc8;
+            box-shadow: inset 0 0 15px rgba(232,220,200,0.3);
+        }
+        .cert-inner {
+            padding: 16px 12px;
+            background: #fff;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .cert-corner-decoration {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: #b8860b;
+            border-style: solid;
+        }
+        .cert-corner-decoration.top-left { top: 0; left: 0; border-width: 3px 0 0 3px; }
+        .cert-corner-decoration.top-right { top: 0; right: 0; border-width: 3px 3px 0 0; }
+        .cert-corner-decoration.bottom-left { bottom: 0; left: 0; border-width: 0 0 3px 3px; }
+        .cert-corner-decoration.bottom-right { bottom: 0; right: 0; border-width: 0 3px 3px 0; }
+        
+        .cert-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .cert-logo {
+            width: 45px;
+            height: 45px;
+            margin-bottom: 10px;
+            border: 2px solid #7eb8da;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f0f8ff;
+        }
+        .cert-logo img {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+        }
+        .cert-title-section {
+            margin-bottom: 12px;
+        }
+        .cert-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0a2540;
+            letter-spacing: 5px;
+            margin-bottom: 4px;
+        }
+        .cert-subtitle {
+            font-size: 9px;
+            color: #546e7a;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .cert-info-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+        .cert-info-box {
+            background: #e8f1f8;
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: 1px solid #c5d9e8;
+        }
+        .cert-info-label {
+            font-size: 9px;
+            color: #546e7a;
+            margin-bottom: 1px;
+        }
+        .cert-info-value {
+            font-size: 13px;
+            color: #1a2744;
+            font-weight: 600;
+        }
+        .cert-info-value.highlight {
+            color: #0a2540;
+        }
+        .cert-course-box {
+            background: #e8f1f8;
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: 1px solid #c5d9e8;
+        }
+        .cert-course-label {
+            font-size: 9px;
+            color: #546e7a;
+            margin-bottom: 1px;
+        }
+        .cert-course-value {
+            font-size: 13px;
+            color: #1a2744;
+            font-weight: 600;
+        }
+        .cert-comment-section {
+            width: 100%;
+            background: linear-gradient(135deg, #fff3e0 0%, #fff 100%);
+            padding: 8px 10px;
+            border-radius: 4px;
+            border-left: 3px solid #b8860b;
+            margin-bottom: 8px;
+        }
+        .cert-comment-text {
+            font-size: 10px;
+            color: #4a5568;
+            line-height: 1.5;
+            text-align: justify;
+        }
+        .cert-conditions-section {
+            width: 100%;
+            padding: 6px 10px;
+            background: #dcfce7;
+            border-radius: 4px;
+            border: 1px solid #86efac;
+            margin-bottom: 8px;
+        }
+        .cert-conditions-title {
+            font-size: 9px;
+            color: #166534;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        .cert-conditions-text {
+            font-size: 9px;
+            color: #15803d;
+            line-height: 1.4;
+        }
+        .cert-footer-section {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-top: 4px;
+            border-top: 1px solid #c5d9e8;
+        }
+        .cert-qrcode-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .cert-qrcode {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #c5d9e8;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .cert-qrcode img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .cert-number {
+            font-size: 8px;
+            color: #546e7a;
+            margin-top: 3px;
+            max-width: 55px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .cert-seal-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 4px;
+        }
+        .cert-seal {
+            font-size: 20px;
+            color: #c41d33;
+            font-style: italic;
+            font-weight: 500;
+            letter-spacing: 2px;
+            transform: rotate(-3deg);
+            text-decoration: underline;
+            text-decoration-color: rgba(196,29,51,0.4);
+            text-decoration-thickness: 1px;
+            text-underline-offset: 4px;
+            line-height: 1.2;
+        }
+        .cert-signer {
+            font-size: 10px;
+            color: #546e7a;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+        .cert-date {
+            font-size: 10px;
+            color: #546e7a;
+            margin-top: 4px;
+            margin-bottom: 0;
+        }
+        .cert-actions-section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+        .cert-action-btn {
+            padding: 6px 4px;
+            border: none;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 500;
+            color: #fff;
+            cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .cert-action-btn.red {
+            background: linear-gradient(135deg, #e53935, #c62828);
+        }
+        .cert-action-btn.green {
+            background: linear-gradient(135deg, #388e3c, #2e7d32);
+        }
+        .cert-action-btn.blue {
+            background: linear-gradient(135deg, #1e88e5, #1565c0);
+        }
+        .cert-action-btn.cyan {
+            background: linear-gradient(135deg, #00acc1, #00838f);
+        }
+        .cert-close-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: #f5f5f5;
+            color: #666;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        .cert-tip {
+            text-align: center;
+            font-size: 11px;
+            color: #bbb;
+            margin-top: 12px;
+            padding-bottom: 12px;
+        }
+
+        /* 获取更多证书链接 */
+        .get-more-certs {
+            text-align: center;
+            padding: 20px 14px;
+            color: #1a73e8;
+            font-size: 13px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .get-more-certs:hover {
+            color: #1557b0;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="phone-container">
+    <div class="page-content">
+    <div class="status-bar">
+        <span class="status-time">9:41</span>
+        <div class="status-icons"><span>📶</span><span>📡</span><span>🔋</span></div>
+    </div>
+
+    <div class="nav-bar">
+        <a href="我的页面.html" class="nav-back">‹</a>
+        <span class="nav-title">我的证书</span>
+    </div>
+
+    <div class="category-tabs">
+            <div class="category-tab active" data-type="all" onclick="filterCerts('all')">全部</div>
+            <div class="category-tab" data-type="learning" onclick="filterCerts('learning')">投教学习</div>
+            <div class="category-tab" data-type="competition" onclick="filterCerts('competition')">模拟交易大赛</div>
+            <div class="category-tab" data-type="practice" onclick="filterCerts('practice')">模拟交易</div>
+        </div>
+
+        <div class="cert-list" id="certList">
+        <!-- 证书1 - 投教学习 -->
+        <div class="cert-card" data-type="learning" onclick="showCert(0)">
+            <div class="cert-card-top">
+                <div class="cert-badge gold">
+                    <span class="cert-badge-icon">📜</span>
+                </div>
+                <div class="cert-info">
+                    <div class="cert-name">期权及指数业务介绍</div>
+                    <div class="cert-meta">
+                        <span>2025年8月</span>
+                    </div>
+                </div>
+                <span class="cert-arrow">›</span>
+            </div>
+            <div class="cert-card-bottom">
+                <div class="cert-detail-item">
+                    <div class="cert-detail-label">答题分数</div>
+                    <div class="cert-detail-value score">96</div>
+                </div>
+                <div class="cert-detail-item">
+                    <div class="cert-detail-label">学时</div>
+                    <div class="cert-detail-value">1.6h</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 证书2 - 投教学习 -->
+        <div class="cert-card" data-type="learning" onclick="showCert(1)">
+            <div class="cert-card-top">
+                <div class="cert-badge blue">
+                    <span class="cert-badge-icon">📜</span>
+                </div>
+                <div class="cert-info">
+                    <div class="cert-name">场外业务及期转现案例介绍</div>
+                    <div class="cert-meta">
+                        <span>2025年8月</span>
+                    </div>
+                </div>
+                <span class="cert-arrow">›</span>
+            </div>
+            <div class="cert-card-bottom">
+                <div class="cert-detail-item">
+                    <div class="cert-detail-label">答题分数</div>
+                    <div class="cert-detail-value score">98</div>
+                </div>
+                <div class="cert-detail-item">
+                    <div class="cert-detail-label">学时</div>
+                    <div class="cert-detail-value">1.8h</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 证书3 - 模拟交易大赛证书 -->
+        <div class="cert-card" data-type="competition" onclick="showCert(2)">
+            <div class="cert-card-top">
+                <div class="cert-badge gold">
+                    <span class="cert-badge-icon">🏆</span>
+                </div>
+                <div class="cert-info">
+                    <div class="cert-name">模拟交易大赛优秀奖</div>
+                    <div class="cert-meta">
+                        <span>2025年9月</span>
+                    </div>
+                </div>
+                <span class="cert-arrow">›</span>
+            </div>
+            <div class="cert-card-bottom">
+                <div class="cert-detail-item">
+                    <div class="cert-detail-label">比赛排名</div>
+                    <div class="cert-detail-value score">第12名</div>
+                </div>
+                <div class="cert-detail-item">
+                    <div class="cert-detail-label">收益率</div>
+                    <div class="cert-detail-value">23.5%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 证书4 - 模拟交易证书 -->
+        <div class="cert-card" data-type="practice" onclick="showCert(3)">
+            <div class="cert-card-top">
+                <div class="cert-badge blue">
+                    <span class="cert-badge-icon">📊</span>
+                </div>
+                <div class="cert-info">
+                    <div class="cert-name">模拟交易实战证书</div>
+                    <div class="cert-meta">
+                        <span>2025年10月</span>
+                    </div>
+                </div>
+                <span class="cert-arrow">›</span>
+            </div>
+            <div class="cert-card-bottom">
+                <div class="cert-detail-item">
+                    <div class="cert-detail-label">交易天数</div>
+                    <div class="cert-detail-value score">30天</div>
+                </div>
+                <div class="cert-detail-item">
+                    <div class="cert-detail-label">累计收益</div>
+                    <div class="cert-detail-value">18.2%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部获取更多证书链接 -->
+        <div class="get-more-certs" id="getMoreCerts">
+            <span>点击此处获得更多证书</span>
+        </div>
+        
+        </div> <!-- END page-content -->
+
+        <!-- 底部导航 -->
+        <div class="bottom-nav">
+            <a href="投教基地首页.html" class="nav-item">
+                <div class="nav-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#999" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                    </svg>
+                </div>
+                <span>首页</span>
+            </a>
+            <a href="业务通办.html" class="nav-item">
+                <div class="nav-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#999" d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/>
+                    </svg>
+                </div>
+                <span>业务</span>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#999" d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                </div>
+                <span>数据</span>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#999" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                    </svg>
+                </div>
+                <span>互动</span>
+            </a>
+            <a href="我的页面.html" class="nav-item active">
+                <div class="nav-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#1677ff" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                </div>
+                <span>我的</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- 证书详情弹窗 -->
+<div class="modal-overlay" id="certModal" onclick="closeCert(event)">
+    <div class="cert-modal">
+        <div class="cert-body">
+            <div class="cert-lace-border">
+                <div class="cert-inner">
+                    <div class="cert-corner-decoration top-left"></div>
+                    <div class="cert-corner-decoration top-right"></div>
+                    <div class="cert-corner-decoration bottom-left"></div>
+                    <div class="cert-corner-decoration bottom-right"></div>
+                    
+                    <div class="cert-content">
+                        <div class="cert-logo">
+                            <img src="logo-111.png" alt="Logo">
+                        </div>
+                        
+                        <div class="cert-title-section">
+                            <div class="cert-title">荣誉证书</div>
+                            <div class="cert-subtitle">CERTIFICATE OF ACHIEVEMENT</div>
+                        </div>
+                        
+                        <div class="cert-info-section">
+                            <div class="cert-info-box">
+                                <div class="cert-info-label">姓名</div>
+                                <div class="cert-info-value highlight" id="modalName">学员</div>
+                            </div>
+                            <div class="cert-course-box">
+                                <div class="cert-course-label">培训名称</div>
+                                <div class="cert-course-value" id="modalEvent">期权及指数业务介绍</div>
+                            </div>
+                        </div>
+                        
+                        <div class="cert-comment-section">
+                            <div class="cert-comment-text" id="modalComment">
+                                该学员已完成本课程全部学习内容，考核成绩优秀，特发此证以资鼓励。
+                            </div>
+                        </div>
+                        
+                        <div class="cert-conditions-section">
+                            <div class="cert-conditions-title">获取条件</div>
+                            <div class="cert-conditions-text">完成全部课程学习，考核成绩达到60分以上</div>
+                        </div>
+                        
+                        <div class="cert-footer-section">
+                            <div class="cert-qrcode-area">
+                                <div class="cert-qrcode">
+                                    <img id="modalQrcode" src="" alt="二维码">
+                                </div>
+                                <div class="cert-number" id="modalNumber">DCE202605252387</div>
+                            </div>
+                            
+                            <div class="cert-seal-area">
+                                <div class="cert-seal">严绍明</div>
+                                <div class="cert-signer">签名</div>
+                            </div>
+                        </div>
+                        
+                        <div class="cert-date" id="certDate">2026 年 XX 月 XX 日</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="padding: 8px 12px;">
+            <div class="cert-actions-section">
+                <button class="cert-action-btn red" onclick="downloadPDF()">下载PDF</button>
+                <button class="cert-action-btn cyan" onclick="downloadImage()">下载图片</button>
+                <button class="cert-action-btn green" onclick="shareMoments()">分享朋友圈</button>
+                <button class="cert-action-btn blue" onclick="shareWeChat()">分享微信</button>
+            </div>
+            <button class="cert-close-btn" onclick="closeCertDirect()" style="padding: 8px; font-size: 10px;">关闭</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const certData = [
+        {
+            name: '张三',
+            event: '期权及指数业务介绍',
+            rank: '96分',
+            data: '1.6学时',
+            number: 'DCE202605252387',
+            date: '2026年5月25日',
+            comment: '该学员已完成"期权及指数业务介绍"课程的全部学习内容，认真学习了期权基础知识、指数期货交易策略等核心内容，考核成绩优秀，特发此证。',
+            type: 'learning'
+        },
+        {
+            name: '李四',
+            event: '场外业务及期转现案例介绍',
+            rank: '98分',
+            data: '1.8学时',
+            number: 'DCE202605252388',
+            date: '2026年5月20日',
+            comment: '该学员已完成"场外业务及期转现案例介绍"课程的全部学习内容，深入了解了场外衍生品业务模式和期转现操作实务，考核成绩优异，特发此证。',
+            type: 'learning'
+        },
+        {
+            name: '王五',
+            event: '模拟交易大赛优秀奖',
+            rank: '第12名',
+            data: '收益率 23.5%',
+            number: 'DCE20250923012',
+            date: '2025年9月30日',
+            comment: '该选手在"2025年度大商所模拟交易大赛"中表现优异，在2345名参赛选手中脱颖而出，荣获优秀奖，特发此证以资鼓励。',
+            type: 'competition'
+        },
+        {
+            name: '赵六',
+            event: '模拟交易实战证书',
+            rank: '优秀',
+            data: '交易30天',
+            number: 'DCE20251015678',
+            date: '2025年10月20日',
+            comment: '该学员完成了为期30天的模拟交易实战训练，累计交易156笔，实现收益率18.2%，具备扎实的期货交易实践能力，特发此证。',
+            type: 'practice'
+        }
+    ];
+
+    let currentCertIndex = -1;
+    let currentCategory = 'all';
+
+    // 分类筛选函数
+    function filterCerts(type) {
+        currentCategory = type;
+        
+        // 更新标签样式
+        const tabs = document.querySelectorAll('.category-tab');
+        tabs.forEach(tab => {
+            tab.classList.remove('active');
+            if (tab.dataset.type === type) {
+                tab.classList.add('active');
+            }
+        });
+
+        // 筛选证书
+        const cards = document.querySelectorAll('.cert-card');
+        cards.forEach(card => {
+            if (type === 'all') {
+                card.style.display = 'block';
+            } else {
+                if (card.dataset.type === type) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            }
+        });
+
+        // 更新获取更多证书链接的点击事件
+        const getMoreLink = document.getElementById('getMoreCerts');
+        if (type === 'learning') {
+            getMoreLink.onclick = function() {
+                window.location.href = '学习得证专属页.html';
+            };
+        } else {
+            getMoreLink.onclick = function() {
+                alert('请切换到"投教学习"栏目获取更多证书');
+            };
+        }
+    }
+
+    function showCert(index) {
+        currentCertIndex = index;
+        
+        const data = certData[index];
+        document.getElementById('modalName').textContent = data.name || '学员';
+        document.getElementById('modalEvent').textContent = data.event;
+        document.getElementById('certDate').textContent = data.date;
+        document.getElementById('modalNumber').textContent = data.number;
+        document.getElementById('modalComment').textContent = data.comment;
+        
+        const qrcodeImg = document.getElementById('modalQrcode');
+        if (qrcodeImg) {
+            qrcodeImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${data.number}`;
+        }
+        
+        document.getElementById('certModal').classList.add('show');
+    }
+
+    function closeCert(e) {
+        if (e.target === document.getElementById('certModal')) {
+            document.getElementById('certModal').classList.remove('show');
+        }
+    }
+
+    function closeCertDirect() {
+        document.getElementById('certModal').classList.remove('show');
+    }
+
+    // 下载PDF证书
+    function downloadPDF() {
+        const certDataItem = certData[currentCertIndex];
+        const name = document.getElementById('modalName').textContent;
+        
+        const pdfContent = `
+荣誉证书
+CERTIFICATE OF ACHIEVEMENT
+
+姓　名: ${name}
+学习课程: ${certDataItem.event}
+考核分数: ${certDataItem.rank}
+学时记录: ${certDataItem.data}
+证书编号: ${certDataItem.number}
+发证日期: ${certDataItem.date}
+
+${certDataItem.comment}
+
+大连商品交易所
+        `;
+        
+        const blob = new Blob([pdfContent], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `证书_${certDataItem.event}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        alert('PDF证书已下载');
+    }
+
+    // 下载图片证书
+    function downloadImage() {
+        const certModal = document.querySelector('.cert-modal');
+        const certContent = certModal.querySelector('.cert-content');
+        
+        // 创建canvas
+        const canvas = document.createElement('canvas');
+        const scale = 2;
+        canvas.width = certContent.offsetWidth * scale;
+        canvas.height = certContent.offsetHeight * scale;
+        canvas.style.width = certContent.offsetWidth + 'px';
+        canvas.style.height = certContent.offsetHeight + 'px';
+        
+        const ctx = canvas.getContext('2d');
+        ctx.scale(scale, scale);
+        
+        // 绘制证书背景
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width / scale, canvas.height / scale);
+        
+        // 绘制证书内容（简化版本）
+        ctx.font = 'bold 24px Arial';
+        ctx.fillStyle = '#d4a574';
+        ctx.textAlign = 'center';
+        ctx.fillText('荣誉证书', canvas.width / scale / 2, 50);
+        
+        ctx.font = '14px Arial';
+        ctx.fillStyle = '#999';
+        ctx.fillText('CERTIFICATE OF ACHIEVEMENT', canvas.width / scale / 2, 75);
+        
+        ctx.font = '14px Arial';
+        ctx.fillStyle = '#333';
+        ctx.textAlign = 'left';
+        
+        const certDataItem = certData[currentCertIndex];
+        const name = document.getElementById('modalName').textContent;
+        let y = 120;
+        const padding = 30;
+        
+        ctx.fillText(`姓名: ${name}`, padding, y); y += 28;
+        ctx.fillText(`课程: ${certDataItem.event}`, padding, y); y += 28;
+        ctx.fillText(`分数: ${certDataItem.rank}`, padding, y); y += 28;
+        ctx.fillText(`学时: ${certDataItem.data}`, padding, y); y += 28;
+        ctx.fillText(`编号: ${certDataItem.number}`, padding, y); y += 28;
+        ctx.fillText(`日期: ${certDataItem.date}`, padding, y); y += 36;
+        
+        ctx.font = '12px Arial';
+        ctx.fillStyle = '#555';
+        ctx.textAlign = 'justify';
+        const comment = certDataItem.comment;
+        const maxWidth = canvas.width / scale - padding * 2;
+        wrapText(ctx, comment, padding, y, maxWidth, 18);
+        
+        // 绘制印章
+        ctx.save();
+        ctx.strokeStyle = '#c41d33';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(canvas.width / scale - 60, canvas.height / scale - 60, 45, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        ctx.font = 'bold 12px Arial';
+        ctx.fillStyle = '#c41d33';
+        ctx.textAlign = 'center';
+        ctx.fillText('大连商品', canvas.width / scale - 60, canvas.height / scale - 70);
+        ctx.fillText('交易所', canvas.width / scale - 60, canvas.height / scale - 55);
+        ctx.restore();
+        
+        // 下载图片
+        const dataURL = canvas.toDataURL('image/png');
+        const a = document.createElement('a');
+        a.href = dataURL;
+        a.download = `证书_${certDataItem.event}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        
+        alert('图片证书已下载');
+    }
+
+    // 文本换行函数
+    function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+        const words = text.split('');
+        let line = '';
+        
+        for (let i = 0; i < words.length; i++) {
+            const testLine = line + words[i];
+            const metrics = ctx.measureText(testLine);
+            if (metrics.width > maxWidth && i > 0) {
+                ctx.fillText(line, x, y);
+                line = words[i];
+                y += lineHeight;
+            } else {
+                line = testLine;
+            }
+        }
+        ctx.fillText(line, x, y);
+    }
+
+    // 分享朋友圈
+    function shareMoments() {
+        const certDataItem = certData[currentCertIndex];
+        const name = document.getElementById('modalName').textContent;
+        
+        const shareText = `我在大商所投教平台获得了「${certDataItem.event}」证书！\n\n姓名: ${name}\n证书编号: ${certDataItem.number}\n发证日期: ${certDataItem.date}\n\n扫码核验证书真伪：${certDataItem.number}`;
+        
+        // 复制分享文本到剪贴板
+        navigator.clipboard.writeText(shareText).then(() => {
+            alert('分享内容已复制到剪贴板，请打开微信粘贴到朋友圈');
+        }).catch(() => {
+            alert(`分享内容：\n${shareText}\n\n请手动复制以上内容分享到朋友圈`);
+        });
+    }
+
+    // 分享微信好友
+    function shareWeChat() {
+        const certDataItem = certData[currentCertIndex];
+        const name = document.getElementById('modalName').textContent;
+        
+        const shareText = `我获得了大商所投教平台的「${certDataItem.event}」证书！\n\n姓名: ${name}\n证书编号: ${certDataItem.number}\n发证日期: ${certDataItem.date}\n学时: ${certDataItem.data}`;
+        
+        // 复制分享文本到剪贴板
+        navigator.clipboard.writeText(shareText).then(() => {
+            alert('分享内容已复制到剪贴板，请打开微信粘贴分享给好友');
+        }).catch(() => {
+            alert(`分享内容：\n${shareText}\n\n请手动复制以上内容分享给微信好友`);
+        });
+    }
+</script>
+</body>
+</html>

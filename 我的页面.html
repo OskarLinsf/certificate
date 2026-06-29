@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>我的</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: #e0e0e0; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; overflow: hidden; }
+        .phone-container { width: 320px; height: 812px; background: white; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; position: relative; display: flex; flex-direction: column; }
+        
+        @media (max-width: 430px) {
+            body { background: white; padding: 0; margin: 0; }
+            .phone-container { width: 100%; height: 100vh; max-width: 100%; box-shadow: none; }
+        }
+        .page-content { flex: 1; overflow-y: auto; background: #f5f7fa; scrollbar-width: none; }
+        .page-content::-webkit-scrollbar { display: none; }
+        
+        .user-header { background: linear-gradient(180deg, #e8f4fd 0%, #f0f7fd 50%, #fff 100%); padding: 45px 16px 30px; }
+        .header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+        .user-info { display: flex; align-items: center; gap: 14px; }
+        .avatar { width: 56px; height: 56px; border-radius: 50%; background: #fff; border: 2px solid #e0e0e0; display: flex; align-items: center; justify-content: center; color: #666; font-size: 22px; font-weight: 500; }
+        .user-detail { flex: 1; }
+        .user-name { font-size: 17px; font-weight: 600; color: #333; }
+        .edit-link { font-size: 13px; color: #666; margin-top: 2px; }
+        .header-right { display: flex; gap: 16px; }
+        .notify-btn { width: 36px; height: 36px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; position: relative; }
+        .notify-dot { position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; background: #ff4d4f; border-radius: 50%; }
+        .avatar-btn { width: 36px; height: 36px; border-radius: 50%; background: #fff; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #666; }
+        
+        .func-grid { display: flex; background: #fff; border-radius: 12px; padding: 16px 0; margin: 0 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .func-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+        .func-icon { width: 44px; height: 44px; border-radius: 11px; background: linear-gradient(135deg, #1677ff, #40a9ff); display: flex; align-items: center; justify-content: center; font-size: 22px; color: #fff; }
+        .func-label { font-size: 12px; color: #666; }
+        
+        .menu-card { margin: 12px; background: #fff; border-radius: 12px; overflow: hidden; }
+        .menu-item { display: flex; align-items: center; padding: 15px 16px; border-bottom: 1px solid #f5f5f5; cursor: pointer; }
+        .menu-item:last-child { border-bottom: none; }
+        .menu-item:active { background: #fafafa; }
+        .menu-icon { width: 20px; height: 20px; margin-right: 14px; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #666; }
+        .menu-text { flex: 1; font-size: 15px; color: #333; }
+        .menu-arrow { color: #bbb; font-size: 16px; }
+        .menu-version { font-size: 13px; color: #999; margin-right: 8px; }
+        
+        .bottom-nav { background: #fff; display: flex; padding: 6px 0; padding-bottom: calc(6px + env(safe-area-inset-bottom)); box-shadow: 0 -2px 10px rgba(0,0,0,0.05); z-index: 10001; height: auto; min-height: 50px; flex-shrink: 0; }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #999; font-size: 10px; }
+        .nav-item.active { color: #1677ff; }
+        .nav-icon { width: 24px; height: 24px; margin-bottom: 2px; }
+        .nav-icon svg { width: 100%; height: 100%; }
+        .nav-item.active .nav-icon path { fill: #1677ff !important; }
+        
+        .float-btn { position: fixed; bottom: 80px; right: 16px; width: 52px; height: 52px; background: #1677ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; box-shadow: 0 4px 12px rgba(22,119,255,0.4); }
+        
+        .content-bottom { padding-bottom: 80px; }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <div class="page-content">
+        <div class="user-header">
+            <div class="header-top">
+                <div class="user-info">
+                    <div class="avatar">U</div>
+                    <div class="user-detail">
+                        <div class="user-name">0yOIBM</div>
+                        <div class="edit-link">编辑个人资料 ›</div>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="notify-btn">🔔<span class="notify-dot"></span></div>
+                    <div class="avatar-btn">👤</div>
+                </div>
+            </div>
+            
+            <div class="func-grid">
+                <div class="func-item">
+                    <div class="func-icon" style="font-size: 24px;">🎬</div>
+                    <span class="func-label">我的会议</span>
+                </div>
+                <div class="func-item">
+                    <div class="func-icon" style="font-size: 24px;">⭐</div>
+                    <span class="func-label">我的收藏</span>
+                </div>
+                <div class="func-item" onclick="goToCertificates()">
+                    <div class="func-icon" style="font-size: 24px;">📊</div>
+                    <span class="func-label">我的证书</span>
+                </div>
+                <div class="func-item">
+                    <div class="func-icon" style="font-size: 24px;">💬</div>
+                    <span class="func-label">我的留言</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-card">
+            <div class="menu-item">
+                <div class="menu-icon">⚙️</div>
+                <div class="menu-text">我的设置</div>
+                <span class="menu-arrow">›</span>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">✉️</div>
+                <div class="menu-text">用户反馈</div>
+                <span class="menu-arrow">›</span>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">🔒</div>
+                <div class="menu-text">权限与隐私</div>
+                <span class="menu-arrow">›</span>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">📤</div>
+                <div class="menu-text">分享APP</div>
+                <span class="menu-arrow">›</span>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">ℹ️</div>
+                <div class="menu-text">关于我们</div>
+                <span class="menu-arrow">›</span>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">🔄</div>
+                <div class="menu-text">检测更新</div>
+                <span class="menu-version">V1.3.142</span>
+                <span class="menu-arrow">›</span>
+            </div>
+        </div>
+
+        <div class="content-bottom"></div>
+
+        <div class="float-btn">💬</div>
+
+        </div> <!-- END page-content -->
+
+        <div class="bottom-nav">
+            <a href="投教基地首页.html" class="nav-item">
+                <div class="nav-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#999" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
+                <span>首页</span>
+            </a>
+            <a href="业务通办.html" class="nav-item">
+                <div class="nav-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#999" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zM6 20V4h6v6h6v10H6z"/></svg></div>
+                <span>业务</span>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#999" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
+                <span>数据</span>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#999" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+                <span>互动</span>
+            </a>
+            <a href="我的页面.html" class="nav-item active">
+                <div class="nav-icon"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#1677ff" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
+                <span>我的</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function goToCertificates() { window.location.href = '我的证书.html'; }
+    </script>
+</body>
+</html>
