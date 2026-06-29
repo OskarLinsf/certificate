@@ -3,30 +3,1392 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="0; url=投教基地首页.html">
     <title>大商所投教基地</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #f5f7fa; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
-        .container { text-align: center; padding: 20px; }
-        .logo { width: 100px; height: 100px; background: #1677ff; border-radius: 12px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 48px; }
-        h1 { font-size: 24px; color: #333; margin-bottom: 30px; }
-        .links { display: flex; flex-direction: column; gap: 12px; }
-        a { padding: 14px 24px; background: white; border-radius: 8px; text-decoration: none; color: #333; font-size: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.2s; }
-        a:hover { background: #1677ff; color: white; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: white;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .phone-container {
+            width: 100%;
+            height: 100vh;
+            max-width: 100%;
+            background: white;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        .page-content {
+            flex: 1;
+            overflow-y: auto;
+            background: #f5f7fa;
+            scrollbar-width: none;
+            padding-bottom: 60px;
+        }
+        .page-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+            padding: 12px 16px;
+            padding-top: 40px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-left {
+            width: 50px;
+        }
+        .header-logo {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+        .header-center {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+        .search-box {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            max-width: 380px;
+            height: 36px;
+        }
+        .search-icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            opacity: 0.7;
+        }
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: #333;
+            outline: none;
+            font-size: 13px;
+            width: 100%;
+        }
+        .search-box input::placeholder { color: #999; }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            width: 80px;
+            justify-content: flex-end;
+        }
+        .header-icon {
+            position: relative;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .header-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+        .header-icon .badge {
+            position: absolute;
+            top: -4px;
+            right: -8px;
+            background: red;
+            color: white;
+            font-size: 10px;
+            padding: 1px 4px;
+            border-radius: 10px;
+            min-width: 16px;
+            text-align: center;
+        }
+
+        .quick-entry-new {
+            display: flex;
+            justify-content: space-around;
+            padding: 16px 0;
+            background: white;
+            margin: 12px 12px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .entry-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .entry-card svg {
+            width: 32px;
+            height: 32px;
+        }
+        .entry-label {
+            font-size: 11px;
+            color: #333;
+        }
+
+        .banner-section {
+            width: 100%;
+            padding: 15px;
+        }
+        .banner-image {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+        }
+        .card {
+            background: white;
+            margin: 0 12px 10px;
+            border-radius: 10px;
+            padding: 14px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+        }
+        .card-more {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .notice-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 80px;
+            overflow-y: auto;
+        }
+        .notice-list::-webkit-scrollbar { display: none; }
+        .notice-item {
+            display: flex;
+            align-items: flex-start;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .notice-item:last-child { border-bottom: none; }
+        .notice-dot {
+            width: 5px;
+            height: 5px;
+            background: #ff5252;
+            border-radius: 50%;
+            margin-right: 8px;
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+        .notice-content {
+            flex: 1;
+            font-size: 13px;
+            color: #333;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .notice-time {
+            font-size: 11px;
+            color: #bbb;
+            margin-left: 8px;
+            flex-shrink: 0;
+        }
+
+        .edu-tabs {
+            display: flex;
+            gap: 12px;
+            padding: 8px 0;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .edu-tabs::-webkit-scrollbar { display: none; }
+        .edu-tab {
+            flex-shrink: 0;
+            padding: 4px 12px;
+            border-radius: 14px;
+            font-size: 12px;
+            color: #999;
+            background: #f5f5f5;
+            cursor: pointer;
+        }
+        .edu-tab.active {
+            background: #1976d2;
+            color: white;
+        }
+        .edu-scroll {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 4px 0;
+            scrollbar-width: none;
+        }
+        .edu-scroll::-webkit-scrollbar { display: none; }
+        .edu-card {
+            flex-shrink: 0;
+            width: 140px;
+        }
+        .edu-image-container {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 8px;
+            height: 90px;
+        }
+        .edu-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .edu-image-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(0,0,0,0.6);
+            padding: 4px;
+            border-radius: 4px;
+        }
+        .edu-image-badge svg {
+            width: 16px;
+            height: 16px;
+        }
+        .edu-play-button {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            background: rgba(0,0,0,0.7);
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .edu-play-button svg {
+            width: 14px;
+            height: 14px;
+        }
+        .play-duration {
+            font-size: 10px;
+            color: white;
+        }
+        .edu-card-title {
+            font-size: 12px;
+            color: #333;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .edu-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 10px;
+        }
+        .edu-indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #ddd;
+        }
+        .edu-indicator.active {
+            background: #1976d2;
+        }
+
+        .activity-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .activity-card {
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            background: white;
+            border: 1px solid #f0f0f0;
+            height: 100%;
+        }
+
+        .activity-card img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+        }
+        .activity-status-bar {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            display: flex;
+            gap: 4px;
+        }
+        .activity-status {
+            background: #e53935;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .activity-time {
+            background: rgba(0,0,0,0.6);
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .activity-bottom {
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .activity-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .activity-btn {
+            background: #1976d2;
+            color: white;
+            font-size: 12px;
+            padding: 4px 12px;
+            border: none;
+            white-space: nowrap;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .calendar-tabs {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+        .calendar-tab {
+            font-size: 14px;
+            color: #999;
+            cursor: pointer;
+            padding-bottom: 4px;
+            border-bottom: 2px solid transparent;
+        }
+        .calendar-tab.active {
+            color: #1976d2;
+            border-bottom-color: #1976d2;
+        }
+        .mini-calendar {
+            margin-bottom: 12px;
+        }
+        .mini-calendar-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+        .mini-cal-day {
+            width: calc(100% / 7);
+            text-align: center;
+        }
+        .mini-calendar-body {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .mini-cal-date {
+            width: calc((100% - 24px) / 7);
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            color: #333;
+            border-radius: 6px;
+        }
+        .mini-cal-date.weekend { color: #999; }
+        .mini-cal-date.today {
+            background: #1976d2;
+            color: white;
+        }
+        .calendar-tags {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .calendar-tag {
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        .calendar-tag.blue {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        .calendar-tag.gray {
+            background: #f5f5f5;
+            color: #666;
+        }
+        .calendar-notice-list {
+            margin-bottom: 12px;
+        }
+        .calendar-notice {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .calendar-notice:last-child { border-bottom: none; }
+        .notice-title {
+            font-size: 13px;
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .notice-content {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+        .notice-tip {
+            font-size: 11px;
+            color: #999;
+        }
+        .calendar-more-btn {
+            text-align: center;
+            font-size: 12px;
+            color: #1976d2;
+            padding: 8px;
+        }
+        .market-event-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .market-event {
+            display: flex;
+            gap: 12px;
+        }
+        .event-date {
+            width: 40px;
+            text-align: center;
+            font-size: 10px;
+            color: #999;
+        }
+        .event-date::before {
+            content: '';
+            display: block;
+            width: 8px;
+            height: 8px;
+            background: #1976d2;
+            border-radius: 50%;
+            margin: 4px auto;
+        }
+        .event-info {
+            flex: 1;
+        }
+        .event-title {
+            font-size: 13px;
+            color: #333;
+            margin-bottom: 2px;
+        }
+        .event-time, .event-location {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .news-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .news-item {
+            display: flex;
+            gap: 10px;
+        }
+        .news-img {
+            width: 80px;
+            height: 60px;
+            border-radius: 6px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .news-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .news-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .news-title {
+            font-size: 13px;
+            color: #333;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .news-source {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .thermometer-index-container {
+            display: flex;
+            gap: 8px;
+            margin: 0 12px 10px;
+        }
+        .thermometer-card {
+            flex: 1.2;
+            background: white;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+        }
+        .thermometer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .thermometer-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+        .thermometer-arrow {
+            font-size: 12px;
+            color: #999;
+        }
+        .thermometer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3px;
+        }
+        .thermometer-item {
+            padding: 5px 3px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .thermometer-item.up {
+            background: #ffebee;
+        }
+        .thermometer-item.down {
+            background: #e8f5e9;
+        }
+        .thermometer-name {
+            font-size: 10px;
+            color: #333;
+            margin-bottom: 2px;
+            white-space: nowrap;
+        }
+        .thermometer-value.up {
+            font-size: 13px;
+            font-weight: 600;
+            color: #e53935;
+        }
+        .thermometer-value.down {
+            font-size: 13px;
+            font-weight: 600;
+            color: #43a047;
+        }
+        .index-card {
+            flex: 1;
+            background: white;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+        }
+        .index-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .index-info {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 8px;
+        }
+        .index-name {
+            font-size: 12px;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 4px;
+        }
+        .index-value-badge {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+        .index-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+        .index-change {
+            font-size: 12px;
+            color: #43a047;
+            padding: 1px 4px;
+            background: #e8f5e9;
+            border-radius: 3px;
+        }
+        .index-chart {
+            height: 85px;
+            background: #f5f7fa;
+            border-radius: 6px;
+            position: relative;
+            overflow: hidden;
+            padding: 4px;
+        }
+        .index-chart-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .my-meeting-container {
+            background: white;
+            margin: 0 12px 10px;
+            border-radius: 10px;
+            padding: 14px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+        }
+        .my-meeting-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .my-meeting-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+        }
+        .my-meeting-more {
+            font-size: 12px;
+            color: #999;
+        }
+        .meeting-card {
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            height: 160px;
+        }
+        .meeting-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .meeting-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 20px 12px 12px;
+        }
+        .meeting-status {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #1976d2;
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+        .meeting-name {
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .meeting-info {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .meeting-info-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: rgba(255,255,255,0.8);
+        }
+        .meeting-info-item svg {
+            width: 14px;
+            height: 14px;
+            fill: rgba(255,255,255,0.8);
+        }
+        .meeting-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .meeting-action-btn {
+            flex: 1;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            font-size: 12px;
+            padding: 6px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+        .meeting-action-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: white;
+        }
+        .meeting-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 10px;
+        }
+        .meeting-indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #ddd;
+        }
+        .meeting-indicator.active {
+            background: #1976d2;
+        }
+
+        .heat-index-container {
+            background: white;
+            margin: 0 12px 10px;
+            border-radius: 10px;
+            padding: 14px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+        }
+        .heat-index-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .heat-index-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+        }
+        .heat-index-more {
+            font-size: 12px;
+            color: #999;
+        }
+        .heat-index-body {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .heat-index-body::-webkit-scrollbar { display: none; }
+        .heat-index-card {
+            flex-shrink: 0;
+            width: 120px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+        .heat-index-icon {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+        .heat-index-label {
+            font-size: 12px;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        .heat-index-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1976d2;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            max-width: 100%;
+            background: #fff;
+            display: flex;
+            padding: 6px 0;
+            padding-bottom: calc(6px + env(safe-area-inset-bottom));
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            z-index: 9999;
+            height: auto;
+            min-height: 50px;
+        }
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 10px;
+        }
+        .nav-item.active {
+            color: #3b82f6;
+        }
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 2px;
+        }
+        .nav-icon svg {
+            width: 100%;
+            height: 100%;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">📚</div>
-        <h1>大商所投教基地</h1>
-        <div class="links">
-            <a href="投教基地首页.html">投教基地首页</a>
-            <a href="学习得证专属页.html">学习得证专属页</a>
-            <a href="我的页面.html">我的页面</a>
-            <a href="我的证书.html">我的证书</a>
-            <a href="业务通办.html">业务通办</a>
-        </div>
-    </div>
+    <div class="phone-container">
+        <div class="page-content">
+            <div class="header">
+                <div class="header-left">
+                    <img src="logo-111.png" alt="大商所Logo" class="header-logo">
+                </div>
+                <div class="header-center">
+                    <div class="search-box">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="#999"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                        <input type="text" placeholder="业务/数据/互动">
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="header-icon" id="scanBtn">
+                        <svg viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v2h2v-2zm0 4h-2v6h2v-6z"/></svg>
+                    </div>
+                    <div class="header-icon" id="bellBtn">
+                        <svg viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                        <span class="badge">35</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="banner-section">
+                <img src="Banner图片.jpg" alt="Banner" class="banner-image">
+            </div>
+
+            <div class="quick-entry-new">
+                <div class="entry-card">
+                    <svg viewBox="0 0 24 24" fill="#1976d2"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V7h-2v2h2z"/></svg>
+                    <div class="entry-label">模拟交易</div>
+                </div>
+                <div class="entry-card">
+                    <svg viewBox="0 0 24 24" fill="#1976d2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                    <div class="entry-label">学习认证</div>
+                </div>
+                <div class="entry-card">
+                    <svg viewBox="0 0 24 24" fill="#1976d2"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                    <div class="entry-label">日成交持仓</div>
+                </div>
+                <div class="entry-card">
+                    <svg viewBox="0 0 24 24" fill="#1976d2"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
+                    <div class="entry-label">日交易参数</div>
+                </div>
+                <div class="entry-card" onclick="window.location.href='证书页面.html'">
+                    <svg viewBox="0 0 24 24" fill="#1976d2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                    <div class="entry-label">证书中心</div>
+                </div>
+                <div class="entry-card">
+                    <svg viewBox="0 0 24 24" fill="#1976d2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11z"/></svg>
+                    <div class="entry-label">更多</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">📢 公告通知</div>
+                    <div class="card-more">更多 →</div>
+                </div>
+                <div class="notice-list">
+                    <div class="notice-item">
+                        <div class="notice-dot"></div>
+                        <div class="notice-content">关于发布《大连商品交易所交割细则》的通知</div>
+                        <div class="notice-time">01-12</div>
+                    </div>
+                    <div class="notice-item">
+                        <div class="notice-dot"></div>
+                        <div class="notice-content">大商所关于举办期货知识培训的通知</div>
+                        <div class="notice-time">01-10</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🎓 投教基地</div>
+                    <div class="card-more" onclick="window.location.href='投教基地.html'">更多 →</div>
+                </div>
+                <div class="edu-tabs">
+                    <div class="edu-tab active" onclick="switchEduTab(0)">最近上新</div>
+                    <div class="edu-tab" onclick="switchEduTab(1)">投教精品</div>
+                    <div class="edu-tab" onclick="switchEduTab(2)">大衍来科普</div>
+                    <div class="edu-tab" onclick="switchEduTab(3)">风险早知道</div>
+                </div>
+                <div class="edu-scroll" id="eduContent0">
+                    <div class="edu-card">
+                        <div class="edu-image-container">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=options%20trading%20finance%20chart%20strategy%20professional%20blue&image_size=portrait_4_3" alt="系列期权">
+                            <div class="edu-image-badge">
+                                <svg viewBox="0 0 24 24" fill="white"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                            </div>
+                        </div>
+                        <div class="edu-card-title">系列期权</div>
+                    </div>
+                    <div class="edu-card">
+                        <div class="edu-image-container">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=soybean%20oil%20agriculture%20futures%20commodity%20trading%20farm&image_size=portrait_4_3" alt="黄大豆豆油期权">
+                            <div class="edu-play-button">
+                                <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                                <span class="play-duration">14:31</span>
+                            </div>
+                        </div>
+                        <div class="edu-card-title">黄大豆1号、豆油系列期权合约业务规则介绍</div>
+                    </div>
+                </div>
+                <div class="edu-scroll" id="eduContent1" style="display: none;">
+                    <div class="edu-card">
+                        <div class="edu-image-container">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=futures%20market%20basic%20knowledge%20education%20finance%20learning&image_size=portrait_4_3" alt="期货市场基础知识">
+                            <div class="edu-play-button">
+                                <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                                <span class="play-duration">25:45</span>
+                            </div>
+                        </div>
+                        <div class="edu-card-title">期货市场基础知识精讲</div>
+                    </div>
+                    <div class="edu-card">
+                        <div class="edu-image-container">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=options%20trading%20strategy%20finance%20chart%20investment&image_size=portrait_4_3" alt="期权交易策略">
+                            <div class="edu-image-badge">
+                                <svg viewBox="0 0 24 24" fill="white"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                            </div>
+                        </div>
+                        <div class="edu-card-title">期权交易策略入门</div>
+                    </div>
+                </div>
+                <div class="edu-scroll" id="eduContent2" style="display: none;">
+                    <div class="edu-card">
+                        <div class="edu-image-container">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=futures%20knowledge%20encyclopedia%20education%20infographic%20finance&image_size=portrait_4_3" alt="期货知识小百科">
+                            <div class="edu-image-badge">
+                                <svg viewBox="0 0 24 24" fill="white"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                            </div>
+                        </div>
+                        <div class="edu-card-title">期货知识小百科</div>
+                    </div>
+                    <div class="edu-card">
+                        <div class="edu-image-container">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=agriculture%20futures%20rural%20development%20farm%20countryside&image_size=portrait_4_3" alt="农产品期货">
+                            <div class="edu-play-button">
+                                <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                                <span class="play-duration">18:20</span>
+                            </div>
+                        </div>
+                        <div class="edu-card-title">农产品期货与乡村振兴</div>
+                    </div>
+                </div>
+                <div class="edu-scroll" id="eduContent3" style="display: none;">
+                    <div class="edu-card">
+                        <div class="edu-image-container">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=futures%20risk%20warning%20alert%20caution%20financial%20safety&image_size=portrait_4_3" alt="风险警示">
+                            <div class="edu-play-button">
+                                <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                                <span class="play-duration">12:15</span>
+                            </div>
+                        </div>
+                        <div class="edu-card-title">期货交易风险警示案例</div>
+                    </div>
+                    <div class="edu-card">
+                        <div class="edu-image-container">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=investor%20suitability%20regulation%20policy%20document%20finance&image_size=portrait_4_3" alt="投资者适当性">
+                            <div class="edu-image-badge">
+                                <svg viewBox="0 0 24 24" fill="white"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                            </div>
+                        </div>
+                        <div class="edu-card-title">投资者适当性管理办法解读</div>
+                    </div>
+                </div>
+                <div class="edu-indicators">
+                    <div class="edu-indicator active"></div>
+                    <div class="edu-indicator"></div>
+                    <div class="edu-indicator"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🎉 活动专区</div>
+                    <div class="card-more">更多 →</div>
+                </div>
+                <div class="activity-grid">
+                    <div class="activity-card">
+                        <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=futures%20trading%20competition%20award%20trophy%20stock%20market%20charts%20professional&image_size=portrait_4_3" alt="模拟交易大赛">
+                        <div class="activity-status-bar">
+                            <span class="activity-status">进行中</span>
+                            <span class="activity-time">08.01-12.30</span>
+                        </div>
+                        <div class="activity-bottom">
+                            <div class="activity-name">模拟交易大赛</div>
+                            <button class="activity-btn">去交易</button>
+                        </div>
+                    </div>
+                    <div class="activity-card">
+                        <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=certificate%20financial%20education%20professional%20learning%20graduation%20diploma&image_size=portrait_4_3" alt="学习认证">
+                        <div class="activity-status-bar">
+                            <span class="activity-status">进行中</span>
+                            <span class="activity-time">09.01-09.30</span>
+                        </div>
+                        <div class="activity-bottom">
+                            <div class="activity-name">学习认证</div>
+                            <button class="activity-btn" onclick="window.location.href='学习得证专属页.html'">去学习</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="calendar-tabs">
+                    <div class="calendar-tab active" onclick="switchCalendarTab(0)">交易日历</div>
+                    <div class="calendar-tab" onclick="switchCalendarTab(1)">市场活动</div>
+                </div>
+                <div class="calendar-content" id="calendarTab0">
+                    <div class="mini-calendar">
+                        <div class="mini-calendar-header">
+                            <div class="mini-cal-day">日</div>
+                            <div class="mini-cal-day">一</div>
+                            <div class="mini-cal-day">二</div>
+                            <div class="mini-cal-day">三</div>
+                            <div class="mini-cal-day">四</div>
+                            <div class="mini-cal-day">五</div>
+                            <div class="mini-cal-day">六</div>
+                        </div>
+                        <div class="mini-calendar-body">
+                            <div class="mini-cal-date weekend">14</div>
+                            <div class="mini-cal-date today">15</div>
+                            <div class="mini-cal-date">16</div>
+                            <div class="mini-cal-date">17</div>
+                            <div class="mini-cal-date">18</div>
+                            <div class="mini-cal-date">19</div>
+                            <div class="mini-cal-date weekend">20</div>
+                        </div>
+                    </div>
+                    <div class="calendar-tags">
+                        <div class="calendar-tag blue">交易提示 25</div>
+                        <div class="calendar-tag gray">结算提示 1</div>
+                    </div>
+                    <div class="calendar-notice-list">
+                        <div class="calendar-notice">
+                            <div class="notice-title">• 合约最后交易日</div>
+                            <div class="notice-content">b2606、fb2606、i2606、j2606、jm2606、l2606、p2606...</div>
+                            <div class="notice-tip">※最后交易日；※本交易日日后，所有未平仓合约的持有...</div>
+                        </div>
+                        <div class="calendar-notice">
+                            <div class="notice-title">• 期货合约进入交割月后涨跌停板参数发生变化</div>
+                            <div class="notice-content">bz2606期货合约</div>
+                            <div class="notice-tip">※从今日起，涨停板幅度为上一交易日结算价的12%，...</div>
+                        </div>
+                    </div>
+                    <div class="calendar-more-btn">查看更多</div>
+                </div>
+                <div class="calendar-content" id="calendarTab1" style="display: none;">
+                    <div class="market-event-list">
+                        <div class="market-event">
+                            <div class="event-date">01-18</div>
+                            <div class="event-info">
+                                <div class="event-title">期货市场分析研讨会</div>
+                                <div class="event-time">14:00 - 16:00</div>
+                                <div class="event-location">大商所3楼会议室</div>
+                            </div>
+                        </div>
+                        <div class="market-event">
+                            <div class="event-date">01-20</div>
+                            <div class="event-info">
+                                <div class="event-title">期权业务培训讲座</div>
+                                <div class="event-time">10:00 - 12:00</div>
+                                <div class="event-location">线上直播</div>
+                            </div>
+                        </div>
+                        <div class="market-event">
+                            <div class="event-date">01-22</div>
+                            <div class="event-info">
+                                <div class="event-title">农产品期货专题论坛</div>
+                                <div class="event-time">13:30 - 17:00</div>
+                                <div class="event-location">大连国际会议中心</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="calendar-more-btn">查看更多</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">📰 新闻发布</div>
+                    <div class="card-more">更多 →</div>
+                </div>
+                <div class="news-list">
+                    <div class="news-item">
+                        <div class="news-img">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=financial%20news%20business%20building%20modern%20cityscape%20professional&image_size=landscape_4_3" alt="新闻图片">
+                        </div>
+                        <div class="news-content">
+                            <div class="news-title">大商所与辽宁省政府签署战略合作协议 携手打造东北亚重要期货交易中心</div>
+                            <div class="news-source">大商所官网 · 01-15</div>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-img">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=agriculture%20futures%20rural%20countryside%20farming%20modern&image_size=landscape_4_3" alt="新闻图片">
+                        </div>
+                        <div class="news-content">
+                            <div class="news-title">大商所"期货助力乡村振兴"系列活动走进内蒙古</div>
+                            <div class="news-source">期货日报 · 01-14</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="thermometer-index-container">
+                <div class="thermometer-card">
+                    <div class="thermometer-header">
+                        <div class="thermometer-title">大商所热力</div>
+                        <div class="thermometer-arrow">→</div>
+                    </div>
+                    <div class="thermometer-grid">
+                        <div class="thermometer-item up">
+                            <div class="thermometer-name">焦煤2609</div>
+                            <div class="thermometer-value up">+1.18%</div>
+                        </div>
+                        <div class="thermometer-item up">
+                            <div class="thermometer-name">聚氯乙烯2609</div>
+                            <div class="thermometer-value up">+0.98%</div>
+                        </div>
+                        <div class="thermometer-item down">
+                            <div class="thermometer-name">聚丙烯2609</div>
+                            <div class="thermometer-value down">-1.85%</div>
+                        </div>
+                        <div class="thermometer-item down">
+                            <div class="thermometer-name">豆粕2609</div>
+                            <div class="thermometer-value down">-0.10%</div>
+                        </div>
+                        <div class="thermometer-item down">
+                            <div class="thermometer-name">聚乙烯2609</div>
+                            <div class="thermometer-value down">-0.93%</div>
+                        </div>
+                        <div class="thermometer-item down">
+                            <div class="thermometer-name">苯乙烯2607</div>
+                            <div class="thermometer-value down">-1.20%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="index-card">
+                    <div class="thermometer-header">
+                        <div class="thermometer-title">大商所指数</div>
+                        <div class="thermometer-arrow">→</div>
+                    </div>
+                    <div class="index-info">
+                        <div class="index-name">农产品指数</div>
+                        <div class="index-value-badge">
+                            <span class="index-value">2162.75</span>
+                            <span class="index-change">-0.18%</span>
+                        </div>
+                    </div>
+                    <div class="index-chart">
+                        <svg viewBox="0 0 100 45" class="index-chart-svg">
+                            <defs>
+                                <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#81c784;stop-opacity:0.3" />
+                                    <stop offset="100%" style="stop-color:#81c784;stop-opacity:0" />
+                                </linearGradient>
+                            </defs>
+                            <line x1="8" y1="5" x2="8" y2="40" stroke="#e0e0e0" stroke-width="0.5"/>
+                            <line x1="8" y1="5" x2="98" y2="5" stroke="#e0e0e0" stroke-width="0.5"/>
+                            <line x1="8" y1="15" x2="98" y2="15" stroke="#f0f0f0" stroke-width="0.5" stroke-dasharray="1.5,1.5"/>
+                            <line x1="8" y1="25" x2="98" y2="25" stroke="#f0f0f0" stroke-width="0.5" stroke-dasharray="1.5,1.5"/>
+                            <line x1="8" y1="35" x2="98" y2="35" stroke="#f0f0f0" stroke-width="0.5" stroke-dasharray="1.5,1.5"/>
+                            <path d="M8,30 Q14,27 20,24 T32,20 T44,22 T56,17 T68,20 T80,14 T92,18 L92,40 L8,40 Z" fill="url(#chartGradient)"/>
+                            <path d="M8,30 Q14,27 20,24 T32,20 T44,22 T56,17 T68,20 T80,14 T92,18" fill="none" stroke="#43a047" stroke-width="1.5" stroke-linecap="round"/>
+                            <circle cx="92" cy="18" r="2" fill="#43a047" stroke="white" stroke-width="1"/>
+                            <text x="3" y="8" font-size="5" fill="#999" text-anchor="end">+0.6%</text>
+                            <text x="3" y="18" font-size="5" fill="#999" text-anchor="end">0.0%</text>
+                            <text x="3" y="28" font-size="5" fill="#999" text-anchor="end">-0.3%</text>
+                            <text x="3" y="38" font-size="5" fill="#999" text-anchor="end">-0.6%</text>
+                            <text x="15" y="44" font-size="4.5" fill="#bbb">09:30</text>
+                            <text x="35" y="44" font-size="4.5" fill="#bbb">10:30</text>
+                            <text x="55" y="44" font-size="4.5" fill="#bbb">11:30</text>
+                            <text x="75" y="44" font-size="4.5" fill="#bbb">13:30</text>
+                            <text x="92" y="44" font-size="4.5" fill="#bbb">14:30</text>
+                        </svg>
+                    </div>
+                    <div style="display: flex; justify-content: center; gap: 4px; margin-top: 6px;">
+                        <div style="width: 8px; height: 8px; border-radius: 50%; background: #1976d2;"></div>
+                        <div style="width: 8px; height: 8px; border-radius: 50%; background: #ddd;"></div>
+                        <div style="width: 8px; height: 8px; border-radius: 50%; background: #ddd;"></div>
+                        <div style="width: 8px; height: 8px; border-radius: 50%; background: #ddd;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="my-meeting-container">
+                <div class="my-meeting-header">
+                    <div class="my-meeting-title">我的会议</div>
+                    <div class="my-meeting-more">更多 →</div>
+                </div>
+                <div class="meeting-card">
+                    <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=professional%20conference%20meeting%20room%20microphone%20presentation%20business&image_size=landscape_16_9" alt="会议图片">
+                    <div class="meeting-status">进行中</div>
+                    <div class="meeting-overlay">
+                        <div class="meeting-name">期权交易策略高级研修班</div>
+                        <div class="meeting-info">
+                            <div class="meeting-info-item">
+                                <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z"/></svg>
+                                <span>2026年3月5日 13:30-17:30</span>
+                            </div>
+                            <div class="meeting-info-item">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                <span>深圳证券交易所大楼</span>
+                            </div>
+                        </div>
+                        <div class="meeting-actions">
+                            <button class="meeting-action-btn">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                                详情
+                            </button>
+                            <button class="meeting-action-btn">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                                签到
+                            </button>
+                            <button class="meeting-action-btn">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                                凭证
+                            </button>
+                            <button class="meeting-action-btn">
+                                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                                投票
+                            </button>
+                            <button class="meeting-action-btn">
+                                <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+                                分享
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="meeting-indicators">
+                    <div class="meeting-indicator"></div>
+                    <div class="meeting-indicator"></div>
+                    <div class="meeting-indicator"></div>
+                    <div class="meeting-indicator active"></div>
+                </div>
+            </div>
+        </div> <!-- END page-content -->
+        <div class="bottom-nav">
+            <a href="投教基地首页.html" class="nav-item active">
+                <div class="nav-icon"><svg viewBox="0 0 24 24"><path fill="#3b82f6" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
+                <span>首页</span>
+            </a>
+            <a href="业务通办.html" class="nav-item">
+                <div class="nav-icon"><svg viewBox="0 0 24 24"><path fill="#999" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zM6 20V4h6v6h6v10H6z"/></svg></div>
+                <span>业务</span>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><svg viewBox="0 0 24 24"><path fill="#999" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
+                <span>数据</span>
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><svg viewBox="0 0 24 24"><path fill="#999" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+                <span>互动</span>
+            </a>
+            <a href="我的页面.html" class="nav-item">
+                <div class="nav-icon"><svg viewBox="0 0 24 24"><path fill="#999" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
+                <span>我的</span>
+            </a>
+        </div> <!-- END bottom-nav -->
+    </div> <!-- END phone-container -->
+
+    <script>
+        function switchEduTab(index) {
+            document.querySelectorAll('.edu-tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === index);
+            });
+            document.querySelectorAll('.edu-scroll').forEach((scroll, i) => {
+                scroll.style.display = i === index ? 'flex' : 'none';
+            });
+            document.querySelectorAll('.edu-indicator').forEach((indicator, i) => {
+                indicator.classList.toggle('active', i === index);
+            });
+        }
+
+        function switchCalendarTab(index) {
+            document.querySelectorAll('.calendar-tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === index);
+            });
+            document.querySelectorAll('.calendar-content').forEach((content, i) => {
+                content.style.display = i === index ? 'block' : 'none';
+            });
+        }
+
+        let noticeScrollIndex = 0;
+        function autoScrollNotice() {
+            const noticeList = document.querySelector('.notice-list');
+            const noticeItems = document.querySelectorAll('.notice-item');
+            if (noticeItems.length <= 1) return;
+            
+            noticeScrollIndex = (noticeScrollIndex + 1) % noticeItems.length;
+            const scrollTop = noticeItems[noticeScrollIndex].offsetTop;
+            noticeList.scrollTo({
+                top: scrollTop,
+                behavior: 'smooth'
+            });
+        }
+        setInterval(autoScrollNotice, 5000);
+
+        let meetingScrollIndex = 0;
+        function autoScrollMeeting() {
+            const meetingCards = document.querySelectorAll('.meeting-card');
+            const indicators = document.querySelectorAll('.meeting-indicator');
+            if (meetingCards.length <= 1) return;
+            
+            meetingCards.forEach((card, i) => {
+                card.style.display = i === meetingScrollIndex ? 'block' : 'none';
+            });
+            indicators.forEach((indicator, i) => {
+                indicator.classList.toggle('active', i === meetingScrollIndex);
+            });
+            meetingScrollIndex = (meetingScrollIndex + 1) % meetingCards.length;
+        }
+        setInterval(autoScrollMeeting, 5000);
+    </script>
 </body>
 </html>
