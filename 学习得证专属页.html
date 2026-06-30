@@ -12,8 +12,9 @@
         @media (max-width: 430px) {
             body { background: white; padding: 0; margin: 0; display: block; justify-content: initial; align-items: initial; }
             .phone-container { width: 100%; height: 100vh; max-width: 100%; box-shadow: none; }
+            .bottom-nav { left: 0; right: 0; width: 100%; transform: none; }
         }
-        .page-content { flex: 1; overflow-y: auto; background: #f5f7fa; scrollbar-width: none; }
+        .page-content { flex: 1; overflow-y: auto; background: #f5f7fa; scrollbar-width: none; padding-bottom: 60px; }
         .page-content::-webkit-scrollbar { display: none; }
         
         .top-bar { display: flex; align-items: center; padding: 12px 16px; padding-top: 44px; background-color: white; border-bottom: 1px solid #f0f0f0; }
@@ -67,6 +68,7 @@
         .cert-btn { width: 100%; padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 500; border: none; cursor: pointer; margin-top: 8px; }
         .cert-btn.primary { background: linear-gradient(135deg, #1677ff, #40a9ff); color: white; }
         .cert-btn.secondary { background: linear-gradient(135deg, #fa8c16, #ffc53d); color: white; }
+        .cert-btn.success { background: linear-gradient(135deg, #fa8c16, #ffc53d); color: white; box-shadow: 0 4px 12px rgba(250,140,22,0.4); }
         
         .empty-state { text-align: center; padding: 40px 0; color: #999; }
         .empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
@@ -119,7 +121,7 @@
         
         .float-share-btn { width: 48px; height: 48px; background: linear-gradient(135deg, #1677ff, #40a9ff); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 22px; box-shadow: 0 4px 12px rgba(22,119,255,0.4); cursor: pointer; margin: 20px auto; }
         
-        .bottom-nav { background: white; display: flex; justify-content: space-around; padding: 6px 0; padding-bottom: calc(6px + env(safe-area-inset-bottom)); flex-shrink: 0; width: 100%; box-sizing: border-box; }
+        .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 320px; background: white; display: flex; justify-content: space-around; padding: 6px 0; padding-bottom: calc(6px + env(safe-area-inset-bottom)); flex-shrink: 0; box-sizing: border-box; z-index: 9999; }
         .full-page { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #f5f7fa; display: none; flex-direction: column; z-index: 10002; }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #999; text-decoration: none; font-size: 11px; }
         .nav-item.active { color: #1677ff; }
@@ -134,7 +136,7 @@
         .modal-btn.primary { background: linear-gradient(135deg, #1677ff, #40a9ff); color: white; }
         .modal-btn.secondary { background: #f5f5f5; color: #666; }
         
-        .cert-modal-content { width: 100%; max-width: 360px; background: #fff; border-radius: 8px; overflow: hidden; position: relative; box-shadow: 0 15px 50px rgba(0,0,0,0.3); }
+        .cert-modal-content { width: 90%; max-width: 360px; max-height: 90vh; background: #fff; border-radius: 8px; overflow: hidden; position: relative; box-shadow: 0 15px 50px rgba(0,0,0,0.3); overflow-y: auto; }
         .cert-body { background: #fff; padding: 16px; height: auto; }
         .cert-lace-border { padding: 12px; background: radial-gradient(circle at 10px 10px, rgba(196,149,106,0.08) 2px, transparent 2.5px), radial-gradient(circle at 90px 20px, rgba(196,149,106,0.06) 1.5px, transparent 2px), radial-gradient(circle at 170px 10px, rgba(196,149,106,0.08) 2px, transparent 2.5px), radial-gradient(circle at 260px 20px, rgba(196,149,106,0.06) 1.5px, transparent 2px), radial-gradient(circle at 10px 80px, rgba(196,149,106,0.06) 1.5px, transparent 2px), radial-gradient(circle at 90px 70px, rgba(196,149,106,0.08) 2px, transparent 2.5px), radial-gradient(circle at 170px 80px, rgba(196,149,106,0.06) 1.5px, transparent 2px), radial-gradient(circle at 260px 70px, rgba(196,149,106,0.08) 2px, transparent 2.5px), radial-gradient(circle at 50px 140px, rgba(196,149,106,0.07) 1.8px, transparent 2.3px), radial-gradient(circle at 130px 130px, rgba(196,149,106,0.09) 2.2px, transparent 2.7px), radial-gradient(circle at 210px 140px, rgba(196,149,106,0.07) 1.8px, transparent 2.3px), radial-gradient(circle at 290px 130px, rgba(196,149,106,0.09) 2.2px, transparent 2.7px), linear-gradient(135deg, #faf8f3 0%, #fff 100%); border-radius: 4px; border: 1px solid #e8dcc8; }
         .cert-inner { padding: 16px 12px; background: #fff; border-radius: 4px; display: flex; flex-direction: column; position: relative; }
@@ -229,7 +231,6 @@
                         <div class="progress-title">学习进度</div>
                         <div class="progress-grid">
                             <div class="progress-item"><div class="progress-value">15/20</div><div class="progress-label">课时</div></div>
-                            <div class="progress-item"><div class="progress-value">1/2</div><div class="progress-label">考试</div></div>
                             <div class="progress-item"><div class="progress-value">3/4</div><div class="progress-label">课程</div></div>
                         </div>
                         <div class="progress-bar"><div class="progress-fill" style="width: 75%;"></div></div>
@@ -267,7 +268,7 @@
                             <div class="cert-name">期货市场基础知识</div>
                             <div class="cert-desc">免费课程，直接开始学习</div>
                         </div>
-                        <div class="cert-status free">免费</div>
+                        <div class="cert-status free">免报名</div>
                     </div>
                     <button class="cert-btn primary" onclick="event.stopPropagation(); openDetail('期货市场基础知识')">开始学习</button>
                 </div>
@@ -376,6 +377,10 @@
                 </div>
             </div>
             
+            <div id="getCertBtnContainer" style="display: none; padding: 16px;">
+                <button class="cert-btn primary" onclick="getCertificate()" style="width: 100%; font-size: 16px; padding: 14px;">获取证书</button>
+            </div>
+            
             </div>
         
         <div class="full-page" id="courseIntroPage" style="display: none;">
@@ -402,7 +407,6 @@
                 <div style="font-size: 16px; font-weight: 600; color: #333; margin-bottom: 12px;">📜 证书准入条件</div>
                 <div style="font-size: 14px; color: #666; line-height: 1.6;">
                     <div style="margin-bottom: 8px;">• 完成全部课程学习，课程进度达到100%</div>
-                    <div style="margin-bottom: 8px;">• 通过知识测试，成绩≥80分</div>
                     <div style="margin-bottom: 8px;">• 累计学习时长≥20小时</div>
                     <div>• 无违规记录，遵守学习平台相关规定</div>
                 </div>
@@ -594,25 +598,8 @@
                 <div class="page-title">其他相关证书课程</div>
             </div>
             <div style="flex: 1; overflow-y: auto; padding: 16px;">
-                <div style="background: white; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
-                    <div style="margin-bottom: 12px;">
-                        <div style="font-size: 12px; color: #999; margin-bottom: 2px;">班级规模</div>
-                        <div style="font-size: 18px; font-weight: 600; color: #1677ff;">1,234 人</div>
-                    </div>
-                    <div style="margin-bottom: 12px;">
-                        <div style="font-size: 12px; color: #999; margin-bottom: 2px;">平均完成度</div>
-                        <div style="font-size: 18px; font-weight: 600; color: #1677ff;">68%</div>
-                    </div>
-                    <div style="margin-bottom: 12px;">
-                        <div style="font-size: 12px; color: #999; margin-bottom: 2px;">学习氛围</div>
-                        <div style="font-size: 14px; color: #333;">讨论区活跃度高，学员互动频繁</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 12px; color: #999; margin-bottom: 2px;">学习建议</div>
-                        <div style="font-size: 14px; color: #333;">建议积极参与讨论，与同学共同进步</div>
-                    </div>
+                <div id="studyMatesList">
                 </div>
-                <button class="cert-btn primary" style="width: 100%;" onclick="closeGridPage()">加入讨论</button>
             </div>
         </div>
         
@@ -808,6 +795,23 @@
             </div>
         </div>
         
+        <div id="nameModal" class="modal-overlay">
+            <div class="modal-content">
+                <span class="modal-close" onclick="closeNameModal()">×</span>
+                <div class="modal-title">📝 输入姓名</div>
+                <input type="text" id="certNameInput" placeholder="请输入您的真实姓名" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; margin-bottom: 12px; box-sizing: border-box;">
+                <div style="padding: 12px; background: #fffbe6; border-radius: 8px; border: 1px solid #ffe58f; margin-bottom: 16px;">
+                    <div style="font-size: 12px; color: #fa8c16; font-weight: 500; margin-bottom: 4px;">📌 温馨提示</div>
+                    <div style="font-size: 12px; color: #666; line-height: 1.5;">您输入的姓名将仅用于证书的发放，我们承诺严格保密您的个人信息，绝不会用于其他用途。</div>
+                </div>
+                <div style="font-size: 11px; color: #999; text-align: center; margin-bottom: 16px; line-height: 1.4;">
+                    免责声明：本证书仅作为学习完成的证明，不代表任何职业资格认证。
+                </div>
+                <button class="modal-btn primary" onclick="submitCertName()">确认提交</button>
+                <button class="modal-btn secondary" onclick="closeNameModal()" style="margin-top: 8px;">取消</button>
+            </div>
+        </div>
+        
         <div id="certModal" class="modal-overlay">
             <div class="cert-modal-content">
                 <span class="modal-close" onclick="closeCertModal()">×</span>
@@ -868,6 +872,7 @@
     </div>
     
     <script>
+        var currentCertName = '';
         var certData = {
             '结算专员证书': { 
                 desc: '完成结算业务培训课程，掌握结算流程与操作规范', 
@@ -877,13 +882,13 @@
                     { name: '结算流程实务', status: 'completed', progress: 100 },
                     { name: '风险管理', status: 'completed', progress: 100 },
                     { name: '资金管理', status: 'completed', progress: 100 },
-                    { name: '高级结算技术', status: 'learning', progress: 60 }
+                    { name: '高级结算技术', status: 'completed', progress: 100 }
                 ],
                 expired: false
             },
             '期权交易师证书': { 
                 desc: '掌握期权交易策略与应用，深入理解衍生品市场', 
-                hours: 20, exams: 2, courses: 4,
+                hours: 20, exams: 0, courses: 4,
                 courseList: [
                     { name: '期权基础概念', status: 'completed', progress: 100 },
                     { name: '期权定价模型', status: 'completed', progress: 100 },
@@ -945,7 +950,8 @@
                     { name: '期权交易策略', status: 'completed', progress: 100 },
                     { name: '风险控制要点', status: 'completed', progress: 100 }
                 ],
-                expired: true
+                expired: true,
+                isCertified: true
             },
             '期货市场基础知识': { 
                 desc: '免费课程，直接开始学习，了解期货市场基础概念', 
@@ -967,6 +973,18 @@
                     { name: '风险防范措施', status: 'not-started', progress: 0 }
                 ],
                 expired: false
+            },
+            '高级风险管理证书': { 
+                desc: '高级风险控制培训，提升风险管理专业能力', 
+                hours: 20, exams: 3, courses: 5,
+                courseList: [
+                    { name: '高级风险模型', status: 'not-started', progress: 0 },
+                    { name: '风险量化分析', status: 'not-started', progress: 0 },
+                    { name: '压力测试', status: 'not-started', progress: 0 },
+                    { name: '风险预警系统', status: 'not-started', progress: 0 },
+                    { name: '应急处置方案', status: 'not-started', progress: 0 }
+                ],
+                expired: true
             }
         };
         
@@ -990,23 +1008,35 @@
             document.getElementById('detailExams').textContent = data.exams || '0';
             document.getElementById('detailCourses').textContent = data.courses || '0';
             
-            toggleNextStudy(data.expired);
+            var isExpired = data.expired || false;
+            var hasProgress = data.courseList && data.courseList.some(c => c.status === 'learning' || c.status === 'completed');
+            var isLearning = data.courseList && data.courseList.some(c => c.status === 'learning' || c.status === 'completed');
+            var isCompleted = data.courseList && data.courseList.every(c => c.status === 'completed' && c.progress === 100);
             
-            if (currentTab === 'learning') {
+            if (isCompleted) {
+                document.getElementById('gridReminder').style.display = 'none';
+                document.getElementById('gridApply').style.display = 'none';
+                document.getElementById('gridSurvey').style.display = 'none';
+                document.getElementById('gridCert').style.display = 'flex';
+                document.getElementById('getCertBtnContainer').style.display = 'block';
+            } else if (isLearning) {
                 document.getElementById('gridReminder').style.display = 'none';
                 document.getElementById('gridApply').style.display = 'none';
                 document.getElementById('gridSurvey').style.display = 'flex';
                 document.getElementById('gridCert').style.display = 'none';
-            } else if (currentTab === 'notRegistered') {
+                document.getElementById('getCertBtnContainer').style.display = 'none';
+            } else if (isExpired && !hasProgress) {
+                document.getElementById('gridReminder').style.display = 'flex';
+                document.getElementById('gridApply').style.display = 'none';
+                document.getElementById('gridSurvey').style.display = 'none';
+                document.getElementById('gridCert').style.display = 'none';
+                document.getElementById('getCertBtnContainer').style.display = 'none';
+            } else {
                 document.getElementById('gridReminder').style.display = 'none';
                 document.getElementById('gridApply').style.display = 'flex';
                 document.getElementById('gridSurvey').style.display = 'none';
                 document.getElementById('gridCert').style.display = 'none';
-            } else {
-                document.getElementById('gridReminder').style.display = 'none';
-                document.getElementById('gridApply').style.display = 'none';
-                document.getElementById('gridSurvey').style.display = 'none';
-                document.getElementById('gridCert').style.display = 'none';
+                document.getElementById('getCertBtnContainer').style.display = 'none';
             }
             
             document.getElementById('mainPage').style.display = 'none';
@@ -1093,6 +1123,102 @@
             document.getElementById('detailPage').classList.remove('active');
             document.getElementById('detailPage').style.display = 'none';
             document.getElementById('mainPage').style.display = 'block';
+            renderCertCards();
+        }
+        
+        function getCertificate() {
+            var certName = document.getElementById('detailCertName').textContent;
+            var data = certData[certName];
+            if (data) {
+                data.isCertified = true;
+            }
+            showCertModal(certName);
+        }
+        
+        function renderCertCards() {
+            var learningSection = document.getElementById('learningSection');
+            var historySection = document.getElementById('historySection');
+            
+            var learningHtml = '';
+            var historyHtml = '';
+            
+            for (var name in certData) {
+                var data = certData[name];
+                var hasProgress = data.courseList && data.courseList.some(c => c.status === 'learning' || c.status === 'completed');
+                var isCompleted = data.courseList && data.courseList.every(c => c.status === 'completed' && c.progress === 100);
+                var isCertified = data.isCertified || false;
+                var isExpired = data.expired || false;
+                
+                if (isCertified) {
+                    historyHtml += '<div class="cert-card">' +
+                        '<div class="cert-header">' +
+                        '<div class="cert-icon" style="background: linear-gradient(135deg, #52c41a, #73d13d); color: white;">🏆</div>' +
+                        '<div class="cert-info">' +
+                        '<div class="cert-name">' + name + '</div>' +
+                        '<div class="cert-desc">' + data.desc + '</div>' +
+                        '</div>' +
+                        '<div class="cert-status completed">已完成</div>' +
+                        '</div>' +
+                        '<div class="progress-section">' +
+                        '<div class="progress-title">获取时间</div>' +
+                        '<div style="font-size: 13px; color: #666;">2026年3月15日</div>' +
+                        '</div>' +
+                        '<button class="cert-btn secondary" onclick="showCertModal(\'' + name + '\')">查看证书</button>' +
+                        '</div>';
+                } else if (isExpired) {
+                    historyHtml += '<div class="cert-card" onclick="openDetail(\'' + name + '\')">' +
+                        '<div class="cert-header">' +
+                        '<div class="cert-icon" style="background: linear-gradient(135deg, #fa8c16, #ffad33); color: white;">📜</div>' +
+                        '<div class="cert-info">' +
+                        '<div class="cert-name">' + name + '</div>' +
+                        '<div class="cert-desc">' + data.desc + '</div>' +
+                        '</div>' +
+                        '<div class="cert-status expired">已过期</div>' +
+                        '</div>' +
+                        '<div class="progress-section">' +
+                        '<div class="progress-title">课程信息</div>' +
+                        '<div class="progress-grid">' +
+                        '<div class="progress-item"><div class="progress-value">' + data.hours + '</div><div class="progress-label">课时</div></div>' +
+                        '<div class="progress-item"><div class="progress-value">' + data.courses + '</div><div class="progress-label">课程</div></div>' +
+                        '</div>' +
+                        '</div>' +
+                        '<button class="cert-btn secondary" onclick="event.stopPropagation(); showNextPeriodReminder(\'' + name + '\')">📅 下一期提醒</button>' +
+                        '</div>';
+                } else if (hasProgress) {
+                    var completedHours = isCompleted ? data.hours : (data.courseList ? data.courseList.filter(c => c.status === 'completed').length : 0);
+                    var completedCourses = data.courseList ? data.courseList.filter(c => c.status === 'completed').length : 0;
+                    var progressPercent = data.courseList ? Math.round(data.courseList.reduce((sum, c) => sum + c.progress, 0) / data.courseList.length) : 0;
+                    
+                    var buttonText = isCompleted ? '🎉 获得证书' : '继续学习';
+                    var buttonClass = isCompleted ? 'cert-btn success' : 'cert-btn primary';
+                    var buttonClick = isCompleted ? 'event.stopPropagation(); promptForCertName(\'' + name + '\')' : 'event.stopPropagation(); openDetail(\'' + name + '\')';
+                    var cardStyle = isCompleted ? 'border: 2px solid #fa8c16; box-shadow: 0 4px 16px rgba(250,140,22,0.3);' : '';
+                    
+                    learningHtml += '<div class="cert-card" onclick="openDetail(\'' + name + '\')" style="' + cardStyle + '">' +
+                        '<div class="cert-header">' +
+                        '<div class="cert-icon" style="background: ' + (isCompleted ? 'linear-gradient(135deg, #fa8c16, #ffc53d)' : 'linear-gradient(135deg, #1677ff, #40a9ff)') + '; color: white;">' + (isCompleted ? '🏆' : '📋') + '</div>' +
+                        '<div class="cert-info">' +
+                        '<div class="cert-name">' + name + '</div>' +
+                        '<div class="cert-desc">' + data.desc + '</div>' +
+                        '</div>' +
+                        '<div class="cert-status ' + (isCompleted ? 'completed' : 'learning') + '">' + (isCompleted ? '已达标' : '学习中') + '</div>' +
+                        '</div>' +
+                        '<div class="progress-section">' +
+                        '<div class="progress-title">' + (isCompleted ? '学习成果' : '学习进度') + '</div>' +
+                        '<div class="progress-grid">' +
+                        '<div class="progress-item"><div class="progress-value">' + completedHours + '/' + data.hours + '</div><div class="progress-label">课时</div></div>' +
+                        '<div class="progress-item"><div class="progress-value">' + completedCourses + '/' + data.courses + '</div><div class="progress-label">课程</div></div>' +
+                        '</div>' +
+                        '<div class="progress-bar"><div class="progress-fill" style="width: ' + progressPercent + '%; background: ' + (isCompleted ? '#fa8c16' : '#1677ff') + ';"></div></div>' +
+                        '<div class="progress-text">已完成 ' + progressPercent + '%</div>' +
+                        '</div>' +
+                        '<button class="' + buttonClass + '" onclick="' + buttonClick + '">' + buttonText + '</button>' +
+                        '</div>';
+                }
+            }
+            
+            learningSection.innerHTML = learningHtml || '<div style="padding: 40px; text-align: center; color: #999;">暂无正在学习的课程</div>';
+            historySection.innerHTML = historyHtml || '<div style="padding: 40px; text-align: center; color: #999;">暂无历史课程</div>';
         }
         
         function openGridPage(pageId) {
@@ -1103,6 +1229,48 @@
             if(pageId === 'apply') {
                 document.getElementById('applyPageCourseName').textContent = document.getElementById('detailCertName').textContent;
             }
+            
+            if(pageId === 'studyMates') {
+                renderStudyMatesList();
+            }
+        }
+        
+        function renderStudyMatesList() {
+            var currentCertName = document.getElementById('detailCertName').textContent;
+            var list = document.getElementById('studyMatesList');
+            var html = '';
+            
+            for (var name in certData) {
+                if (name === currentCertName) continue;
+                
+                var data = certData[name];
+                var hasProgress = data.courseList && data.courseList.some(c => c.status === 'learning' || c.status === 'completed');
+                var isCertified = data.isCertified || false;
+                var isExpired = data.expired || false;
+                
+                if (!hasProgress && !isCertified && !isExpired) {
+                    html += '<div class="cert-card" onclick="openDetail(\'' + name + '\')">' +
+                        '<div class="cert-header">' +
+                        '<div class="cert-icon" style="background: linear-gradient(135deg, #fa8c16, #ffad33); color: white;">📜</div>' +
+                        '<div class="cert-info">' +
+                        '<div class="cert-name">' + name + '</div>' +
+                        '<div class="cert-desc">' + data.desc + '</div>' +
+                        '</div>' +
+                        '<div class="cert-status not-started">未报名</div>' +
+                        '</div>' +
+                        '<div class="progress-section">' +
+                        '<div class="progress-title">课程信息</div>' +
+                        '<div class="progress-grid">' +
+                        '<div class="progress-item"><div class="progress-value">' + data.hours + '</div><div class="progress-label">课时</div></div>' +
+                        '<div class="progress-item"><div class="progress-value">' + data.courses + '</div><div class="progress-label">课程</div></div>' +
+                        '</div>' +
+                        '</div>' +
+                        '<button class="cert-btn secondary" onclick="event.stopPropagation(); showApplyModal(\'' + name + '\')">立即报名</button>' +
+                        '</div>';
+                }
+            }
+            
+            list.innerHTML = html || '<div style="padding: 40px; text-align: center; color: #999;">暂无相关课程</div>';
         }
         
         function closeGridPage() {
@@ -1195,8 +1363,31 @@
             document.getElementById('successModal').classList.remove('show');
         }
         
-        function shareCourse() {
-            alert('分享功能已触发！');
+        function showNextPeriodReminder(certName) {
+            var reminderText = '亲爱的学员，' + certName + '的证书已过期。\n\n下一期课程预计将于2026年7月1日开课，届时我们将通过系统消息通知您。\n\n敬请关注！';
+            alert(reminderText);
+        }
+        
+        function promptForCertName(certName) {
+            currentCertName = certName;
+            document.getElementById('certNameInput').value = '';
+            document.getElementById('nameModal').classList.add('show');
+        }
+        
+        function closeNameModal() {
+            document.getElementById('nameModal').classList.remove('show');
+        }
+        
+        function submitCertName() {
+            var userName = document.getElementById('certNameInput').value;
+            if (userName && userName.trim() !== '') {
+                document.getElementById('certName').textContent = userName.trim();
+                closeNameModal();
+                showCertModal(currentCertName);
+                certData[currentCertName].isCertified = true;
+            } else {
+                alert('请输入您的姓名');
+            }
         }
         
         function showCertModal(certName) {
@@ -1206,12 +1397,15 @@
         
         function closeCertModal() {
             document.getElementById('certModal').classList.remove('show');
+            renderCertCards();
         }
         
         function downloadPDF() { alert('PDF证书已下载'); }
         function downloadImage() { alert('图片证书已下载'); }
         function shareMoments() { alert('分享到朋友圈'); }
         function shareWeChat() { alert('分享到微信'); }
+        
+        renderCertCards();
     </script>
 </body>
 </html>

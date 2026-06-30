@@ -42,6 +42,12 @@
                 max-width: 100%;
                 box-shadow: none;
             }
+            .bottom-nav {
+                left: 0;
+                right: 0;
+                width: 100%;
+                transform: none;
+            }
             .page-content {
                 max-height: none;
             }
@@ -51,7 +57,7 @@
             overflow-y: auto;
             background: #f5f7fa;
             scrollbar-width: none;
-            max-height: 732px;
+            padding-bottom: 60px;
         }
         .page-content::-webkit-scrollbar {
             display: none;
@@ -857,13 +863,18 @@
         }
 
         .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 320px;
             background: #fff;
             display: flex;
             padding: 6px 0;
             padding-bottom: calc(6px + env(safe-area-inset-bottom));
             flex-shrink: 0;
-            width: 100%;
             box-sizing: border-box;
+            z-index: 9999;
         }
         .nav-item {
             flex: 1;

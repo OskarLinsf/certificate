@@ -39,11 +39,18 @@
                 max-width: 100%;
                 box-shadow: none;
             }
+            .bottom-nav {
+                left: 0;
+                right: 0;
+                width: 100%;
+                transform: none;
+            }
         }
         .page-content {
             flex: 1;
             overflow-y: auto;
             scrollbar-width: none;
+            padding-bottom: 60px;
         }
         .page-content::-webkit-scrollbar {
             display: none;
@@ -89,6 +96,11 @@
 
         /* 底部导航 */
         .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 320px;
             height: auto;
             min-height: 50px;
             background-color: #fff;
@@ -96,8 +108,9 @@
             align-items: center;
             padding-bottom: calc(6px + env(safe-area-inset-bottom));
             border-top: 1px solid #e5e7eb;
-            z-index: 10001;
+            z-index: 9999;
             flex-shrink: 0;
+            box-sizing: border-box;
         }
         .nav-item {
             flex: 1;
@@ -129,22 +142,26 @@
         /* 分类标签栏 */
         .category-tabs {
             display: flex;
-            gap: 4px;
+            gap: 8px;
             margin: 0 14px 12px;
             background: transparent;
         }
         .category-tab {
             flex: 1;
-            padding: 8px 6px;
+            padding: 10px 4px;
             text-align: center;
             font-size: 12px;
             color: #888;
             background: rgba(255,255,255,0.85);
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s ease;
             font-weight: 500;
-            border: 1px solid transparent;
+            border: 1px solid rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.2;
         }
         .category-tab:hover {
             color: #333;
@@ -700,7 +717,7 @@
         </div>
 
         <!-- 底部获取更多证书链接 -->
-        <div class="get-more-certs" id="getMoreCerts">
+        <div class="get-more-certs" id="getMoreCerts" onclick="window.location.href='学习得证专属页.html'">
             <span>点击此处获得更多证书</span>
         </div>
         
