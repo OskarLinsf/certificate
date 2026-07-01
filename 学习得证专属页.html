@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>学习得证 - 大商所投教精品</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
@@ -44,6 +44,14 @@
         .cert-status.expired { background: #f5f5f5; color: #999; }
         .cert-status.free { background: #e6fffb; color: #13c2c2; }
         
+        .section-header { display: flex; align-items: center; margin-bottom: 12px; padding: 0 4px; cursor: pointer; }
+        .section-title-text { font-size: 13px; font-weight: 600; color: #666; flex-shrink: 0; }
+        .section-toggle-icon { font-size: 12px; color: #999; margin-left: 4px; transition: transform 0.3s; flex-shrink: 0; transform: rotate(90deg); }
+        .section-header.collapsed .section-toggle-icon { transform: rotate(0deg); }
+        
+        .section-content { margin-bottom: 16px; }
+        .section-header.collapsed + .section-content { display: none; }
+        
         .progress-section { margin-bottom: 6px; }
         .progress-title { font-size: 10px; color: #999; margin-bottom: 4px; }
         .progress-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
@@ -54,7 +62,7 @@
         .progress-value { font-size: 11px; font-weight: 500; color: #333; }
         .progress-label { font-size: 9px; color: #999; }
         
-        .cert-arrow { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 20px; color: #ccc; cursor: pointer; }
+        .section-divider { flex: 1; height: 1px; background: #e0e0e0; margin-left: 8px; }
         
         .progress-list.horizontal { flex-direction: row; }
         
@@ -201,12 +209,17 @@
             </div>
             
             <div class="tabs-container">
-                <div class="tab-item active" onclick="switchTab('learning')">正在学习</div>
-                <div class="tab-item" onclick="switchTab('notRegistered')">未报名</div>
+                <div class="tab-item active" onclick="switchTab('all')">全部课程</div>
                 <div class="tab-item" onclick="switchTab('history')">历史课程</div>
             </div>
             
-            <div class="section-container active" id="learningSection">
+            <div class="section-container active" id="allSection">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <div class="section-title-text">获得证书课程</div>
+                    <div class="section-toggle-icon">›</div>
+                    <div class="section-divider"></div>
+                </div>
+                <div class="section-content">
                 <div class="cert-card" onclick="openDetail('结算专员证书')" style="border: 2px solid #fa8c16; box-shadow: 0 4px 16px rgba(250,140,22,0.3);">
                     <div class="cert-header">
                         <div class="cert-icon" style="background: linear-gradient(135deg, #fa8c16, #ffc53d); color: white;">🏆</div>
@@ -215,7 +228,6 @@
                             <div class="cert-desc">完成结算业务培训课程</div>
                         </div>
                         <div class="cert-status completed">已达标</div>
-                        <div class="cert-arrow" onclick="event.stopPropagation(); openDetail('结算专员证书')">›</div>
                     </div>
                     <div class="progress-section">
                         <div class="progress-title">学习成果</div>
@@ -229,6 +241,35 @@
                         <button class="cert-btn outline" onclick="event.stopPropagation(); openDetail('结算专员证书')">查看详情</button>
                     </div>
                 </div>
+                </div>
+                
+                <div class="section-header" onclick="toggleSection(this)">
+                    <div class="section-title-text">正在学习课程</div>
+                    <div class="section-toggle-icon">›</div>
+                    <div class="section-divider"></div>
+                </div>
+                <div class="section-content">
+                <div class="cert-card" onclick="openDetail('投资者教育基础证书')">
+                    <div class="cert-header">
+                        <div class="cert-icon" style="background: linear-gradient(135deg, #722ed1, #9254de); color: white;">📚</div>
+                        <div class="cert-info">
+                            <div class="cert-name">投资者教育基础证书</div>
+                            <div class="cert-desc">基础课程学习完成，了解期货市场基础知识</div>
+                        </div>
+                        <div class="cert-status learning">学习中</div>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-title">学习进度</div>
+                        <div class="progress-list horizontal">
+                            <div class="progress-item"><div class="progress-check">✓</div><div class="progress-info"><div class="progress-label">课时</div><div class="progress-value">8/8</div></div></div>
+                            <div class="progress-item"><div class="progress-check" style="background: #faad14;"></div><div class="progress-info"><div class="progress-label">考试</div><div class="progress-value">未开始/80分</div></div></div>
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button class="cert-btn primary" onclick="event.stopPropagation(); window.location.href='视频学习.html'">继续学习</button>
+                        <button class="cert-btn outline" onclick="event.stopPropagation(); openDetail('投资者教育基础证书')">查看详情</button>
+                    </div>
+                </div>
                 
                 <div class="cert-card" onclick="openDetail('期权交易师证书')">
                     <div class="cert-header">
@@ -238,13 +279,12 @@
                             <div class="cert-desc">掌握期权交易策略与应用</div>
                         </div>
                         <div class="cert-status learning">学习中</div>
-                        <div class="cert-arrow" onclick="event.stopPropagation(); openDetail('期权交易师证书')">›</div>
                     </div>
                     <div class="progress-section">
                         <div class="progress-title">学习进度</div>
                         <div class="progress-list horizontal">
-                            <div class="progress-item"><div class="progress-check" style="background: #faad14;"></div><div class="progress-info"><div class="progress-label">课程</div><div class="progress-value">3/4</div></div></div>
-                            <div class="progress-item"><div class="progress-check" style="background: #faad14;"></div><div class="progress-info"><div class="progress-label">考试</div><div class="progress-value">1/2</div></div></div>
+                            <div class="progress-item"><div class="progress-check">✓</div><div class="progress-info"><div class="progress-label">课时</div><div class="progress-value">10/10</div></div></div>
+                            <div class="progress-item"><div class="progress-check" style="background: #faad14;"></div><div class="progress-info"><div class="progress-label">考试</div><div class="progress-value">未开始/80分</div></div></div>
                         </div>
                     </div>
                     <div class="button-group">
@@ -252,9 +292,14 @@
                         <button class="cert-btn outline" onclick="event.stopPropagation(); openDetail('期权交易师证书')">查看详情</button>
                     </div>
                 </div>
-            </div>
-            
-            <div class="section-container" id="notRegisteredSection">
+                </div>
+                
+                <div class="section-header" onclick="toggleSection(this)">
+                    <div class="section-title-text">待报名课程</div>
+                    <div class="section-toggle-icon">›</div>
+                    <div class="section-divider"></div>
+                </div>
+                <div class="section-content">
                 <div class="cert-card" onclick="openDetail('风控专员证书')">
                     <div class="cert-header">
                         <div class="cert-icon" style="background: linear-gradient(135deg, #fa8c16, #ffad33); color: white;">🛡️</div>
@@ -262,7 +307,7 @@
                             <div class="cert-name">风控专员证书</div>
                             <div class="cert-desc">风险控制与合规管理培训</div>
                         </div>
-                        <div class="cert-status not-started">未报名</div>
+                        <div class="cert-status not-started">未开始</div>
                     </div>
                     <div class="progress-section">
                         <div class="progress-title">课程信息</div>
@@ -271,43 +316,85 @@
                             <div class="progress-item"><div class="progress-check"></div><div class="progress-info"><div class="progress-label">考试</div><div class="progress-value">3</div></div></div>
                         </div>
                     </div>
+                    <div style="font-size: 11px; color: #999; margin-bottom: 12px;">📅 2026年7月1日 - 2026年8月31日</div>
                     <div class="button-group">
                         <button class="cert-btn secondary" onclick="event.stopPropagation(); showApplyModal('风控专员证书')">立即报名</button>
                         <button class="cert-btn outline" onclick="event.stopPropagation(); openDetail('风控专员证书')">查看详情</button>
                     </div>
                 </div>
                 
+                <div class="cert-card" onclick="openDetail('期货分析师证书')">
+                    <div class="cert-header">
+                        <div class="cert-icon" style="background: linear-gradient(135deg, #1890ff, #40a9ff); color: white;">📊</div>
+                        <div class="cert-info">
+                            <div class="cert-name">期货分析师证书</div>
+                            <div class="cert-desc">市场分析与研究方法，培养专业分析能力</div>
+                        </div>
+                        <div class="cert-status not-started">未开始</div>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-title">课程信息</div>
+                        <div class="progress-list horizontal">
+                            <div class="progress-item"><div class="progress-check"></div><div class="progress-info"><div class="progress-label">课程</div><div class="progress-value">6</div></div></div>
+                            <div class="progress-item"><div class="progress-check"></div><div class="progress-info"><div class="progress-label">考试</div><div class="progress-value">4</div></div></div>
+                        </div>
+                    </div>
+                    <div style="font-size: 11px; color: #999; margin-bottom: 12px;">📅 2026年8月1日 - 2026年10月31日</div>
+                    <div class="button-group">
+                        <button class="cert-btn secondary" onclick="event.stopPropagation(); showApplyModal('期货分析师证书')">立即报名</button>
+                        <button class="cert-btn outline" onclick="event.stopPropagation(); openDetail('期货分析师证书')">查看详情</button>
+                    </div>
+                </div>
+                </div>
+                
+                <div class="section-header" onclick="toggleSection(this)">
+                    <div class="section-title-text">免报名课程</div>
+                    <div class="section-toggle-icon">›</div>
+                    <div class="section-divider"></div>
+                </div>
+                <div class="section-content">
                 <div class="cert-card" onclick="openDetail('期货市场基础知识')">
                     <div class="cert-header">
                         <div class="cert-icon" style="background: linear-gradient(135deg, #52c41a, #73d13d); color: white;">🌱</div>
                         <div class="cert-info">
                             <div class="cert-name">期货市场基础知识</div>
-                            <div class="cert-desc">免费课程，直接开始学习</div>
+                            <div class="cert-desc">无需报名，直接开始学习</div>
                         </div>
                         <div class="cert-status free">免报名</div>
                     </div>
+                    <div style="font-size: 11px; color: #999; margin-bottom: 12px;">📅 长期有效</div>
                     <div class="button-group">
                         <button class="cert-btn primary" onclick="event.stopPropagation(); window.location.href='视频学习.html'">开始学习</button>
                         <button class="cert-btn outline" onclick="event.stopPropagation(); openDetail('期货市场基础知识')">查看详情</button>
                     </div>
                 </div>
+                </div>
             </div>
             
             <div class="section-container" id="historySection">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <div class="section-title-text">已获证书</div>
+                    <div class="section-toggle-icon">›</div>
+                    <div class="section-divider"></div>
+                </div>
+                <div class="section-content">
                 <div class="cert-card">
                     <div class="cert-header">
                         <div class="cert-icon" style="background: linear-gradient(135deg, #52c41a, #73d13d); color: white;">🏆</div>
                         <div class="cert-info">
-                            <div class="cert-name">投资者教育基础证书</div>
-                            <div class="cert-desc">已完成基础课程学习</div>
+                            <div class="cert-name">金融市场分析证书</div>
+                            <div class="cert-desc">全面掌握金融市场分析方法与工具</div>
                         </div>
                         <div class="cert-status completed">已完成</div>
                     </div>
                     <div class="progress-section">
                         <div class="progress-title">获取时间</div>
-                        <div style="font-size: 13px; color: #666;">2026年3月15日</div>
+                        <div style="font-size: 13px; color: #666;">2026年2月20日</div>
                     </div>
-                    <button class="cert-btn secondary" onclick="showCertModal('投资者教育基础证书')">查看证书</button>
+                    <div class="button-group">
+                        <button class="cert-btn secondary" onclick="showCertModal('金融市场分析证书')">查看证书</button>
+                        <button class="cert-btn outline" onclick="openDetail('金融市场分析证书')">课程详情</button>
+                    </div>
                 </div>
                 
                 <div class="cert-card">
@@ -315,15 +402,45 @@
                         <div class="cert-icon" style="background: linear-gradient(135deg, #1890ff, #40a9ff); color: white;">📊</div>
                         <div class="cert-info">
                             <div class="cert-name">期权基础知识证书</div>
-                            <div class="cert-desc">期权入门培训课程</div>
+                            <div class="cert-desc">期权入门培训课程，了解期权基本概念</div>
+                        </div>
+                        <div class="cert-status completed">已完成</div>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-title">获取时间</div>
+                        <div style="font-size: 13px; color: #666;">2026年1月15日</div>
+                    </div>
+                    <div class="button-group">
+                        <button class="cert-btn secondary" onclick="showCertModal('期权基础知识证书')">查看证书</button>
+                        <button class="cert-btn outline" onclick="openDetail('期权基础知识证书')">课程详情</button>
+                    </div>
+                </div>
+                </div>
+                
+                <div class="section-header" onclick="toggleSection(this)">
+                    <div class="section-title-text">已过期课程</div>
+                    <div class="section-toggle-icon">›</div>
+                    <div class="section-divider"></div>
+                </div>
+                <div class="section-content">
+                <div class="cert-card">
+                    <div class="cert-header">
+                        <div class="cert-icon" style="background: linear-gradient(135deg, #fa8c16, #ffad33); color: white;">🛡️</div>
+                        <div class="cert-info">
+                            <div class="cert-name">高级风险管理证书</div>
+                            <div class="cert-desc">高级风险控制培训，提升风险管理专业能力</div>
                         </div>
                         <div class="cert-status expired">已过期</div>
                     </div>
                     <div class="progress-section">
-                        <div class="progress-title">过期时间</div>
-                        <div style="font-size: 13px; color: #666;">2026年2月28日</div>
+                        <div class="progress-title">有效期至</div>
+                        <div style="font-size: 13px; color: #666;">2026年1月31日</div>
                     </div>
-                    <button class="cert-btn primary" onclick="openDetail('期权基础知识证书')">报名下一期</button>
+                    <div class="button-group">
+                        <button class="cert-btn primary" onclick="showNextPeriodReminder('高级风险管理证书')">下一期提醒</button>
+                        <button class="cert-btn outline" onclick="openDetail('高级风险管理证书')">课程详情</button>
+                    </div>
+                </div>
                 </div>
             </div>
             
@@ -820,7 +937,15 @@
                 <div class="modal-title">📝 输入姓名</div>
                 <input type="text" id="certNameInput" placeholder="请输入您的真实姓名" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; margin-bottom: 12px; box-sizing: border-box;">
                 <div style="padding: 12px; background: #fffbe6; border-radius: 8px; border: 1px solid #ffe58f; margin-bottom: 16px;">
-                    <div style="font-size: 13px; color: #fa8c16; font-weight: 500;">📌 仅用于证书制作</div>
+                    <div style="font-size: 13px; color: #fa8c16; font-weight: 500; margin-bottom: 6px;">📌 温馨提示</div>
+                    <div style="font-size: 12px; color: #666; line-height: 1.6;">
+                        1. 您输入的姓名将<span style="color: #fa8c16; font-weight: 500;">仅用于证书制作</span>，我们承诺严格保护您的个人信息<br>
+                        2. 您的信息不会泄露给任何第三方机构或个人<br>
+                        3. 本证书仅作为学习完成的证明，不代表任何职业资格认证
+                    </div>
+                </div>
+                <div style="font-size: 11px; color: #999; text-align: center; margin-bottom: 12px; line-height: 1.5;">
+                    点击"确认提交"即表示您已阅读并同意上述内容
                 </div>
                 <button class="modal-btn primary" onclick="submitCertName()">确认提交</button>
                 <button class="modal-btn secondary" onclick="closeNameModal()" style="margin-top: 8px;">取消</button>
@@ -892,6 +1017,7 @@
             '结算专员证书': { 
                 desc: '完成结算业务培训课程，掌握结算流程与操作规范', 
                 hours: 12, exams: 3, courses: 5,
+                examScore: 85,
                 courseList: [
                     { name: '结算基础知识', status: 'completed', progress: 100 },
                     { name: '结算流程实务', status: 'completed', progress: 100 },
@@ -906,22 +1032,27 @@
                     { name: '应急处理', status: 'completed', progress: 100 },
                     { name: '综合演练', status: 'completed', progress: 100 }
                 ],
-                expired: false
+                expired: false,
+                isCertified: true
             },
             '期权交易师证书': { 
                 desc: '掌握期权交易策略与应用，深入理解衍生品市场', 
-                hours: 20, exams: 0, courses: 4,
+                hours: 10, exams: 1, courses: 4,
+                startTime: '2026年7月1日',
+                endTime: '2026年8月31日',
                 courseList: [
                     { name: '期权基础概念', status: 'completed', progress: 100 },
                     { name: '期权定价模型', status: 'completed', progress: 100 },
-                    { name: '交易策略分析', status: 'learning', progress: 80 },
-                    { name: '实战案例演练', status: 'not-started', progress: 0 }
+                    { name: '交易策略分析', status: 'completed', progress: 100 },
+                    { name: '实战案例演练', status: 'completed', progress: 100 }
                 ],
                 expired: false
             },
             '风控专员证书': { 
                 desc: '风险控制与合规管理培训，提升风险管理能力', 
                 hours: 16, exams: 3, courses: 5,
+                startTime: '2026年7月1日',
+                endTime: '2026年8月31日',
                 courseList: [
                     { name: '风控体系建设', status: 'not-started', progress: 0 },
                     { name: '风险识别与评估', status: 'not-started', progress: 0 },
@@ -944,20 +1075,12 @@
                 ],
                 expired: false
             },
-            '投资者教育讲师证书': { 
-                desc: '投教课程设计与讲授技巧，提升授课能力', 
-                hours: 12, exams: 2, courses: 4,
-                courseList: [
-                    { name: '投教课程设计', status: 'not-started', progress: 0 },
-                    { name: '讲授技巧培训', status: 'not-started', progress: 0 },
-                    { name: '互动教学方法', status: 'not-started', progress: 0 },
-                    { name: '课程评估体系', status: 'not-started', progress: 0 }
-                ],
-                expired: false
-            },
             '投资者教育基础证书': { 
                 desc: '基础课程学习完成，了解期货市场基础知识', 
                 hours: 8, exams: 1, courses: 2,
+                examScore: 60,
+                startTime: '2026年7月1日',
+                endTime: '2026年8月31日',
                 courseList: [
                     { name: '期货市场入门', status: 'completed', progress: 100 },
                     { name: '交易规则与制度', status: 'completed', progress: 100 }
@@ -972,12 +1095,27 @@
                     { name: '期权交易策略', status: 'completed', progress: 100 },
                     { name: '风险控制要点', status: 'completed', progress: 100 }
                 ],
-                expired: true,
+                expired: false,
                 isCertified: true
             },
+            '金融市场分析证书': { 
+                desc: '全面掌握金融市场分析方法与工具', 
+                hours: 24, exams: 3, courses: 6,
+                examScore: 88,
+                courseList: [
+                    { name: '市场分析方法', status: 'completed', progress: 100 },
+                    { name: '技术分析基础', status: 'completed', progress: 100 },
+                    { name: '基本面分析', status: 'completed', progress: 100 },
+                    { name: '量化分析工具', status: 'completed', progress: 100 },
+                    { name: '报告撰写技巧', status: 'completed', progress: 100 },
+                    { name: '实战案例分析', status: 'completed', progress: 100 }
+                ],
+                expired: false
+            },
             '期货市场基础知识': { 
-                desc: '免费课程，直接开始学习，了解期货市场基础概念', 
+                desc: '无需报名，直接开始学习，了解期货市场基础概念', 
                 hours: 8, exams: 2, courses: 4,
+                startTime: '长期有效',
                 courseList: [
                     { name: '期货市场起源', status: 'not-started', progress: 0 },
                     { name: '交易品种介绍', status: 'not-started', progress: 0 },
@@ -986,19 +1124,10 @@
                 ],
                 expired: false
             },
-            '投资者权益保护': { 
-                desc: '免费课程，了解投资者权益，提高自我保护意识', 
-                hours: 6, exams: 1, courses: 3,
-                courseList: [
-                    { name: '投资者权利义务', status: 'not-started', progress: 0 },
-                    { name: '投诉维权渠道', status: 'not-started', progress: 0 },
-                    { name: '风险防范措施', status: 'not-started', progress: 0 }
-                ],
-                expired: false
-            },
             '高级风险管理证书': { 
                 desc: '高级风险控制培训，提升风险管理专业能力', 
                 hours: 20, exams: 3, courses: 5,
+                validUntil: '2026年1月31日',
                 courseList: [
                     { name: '高级风险模型', status: 'not-started', progress: 0 },
                     { name: '风险量化分析', status: 'not-started', progress: 0 },
@@ -1007,10 +1136,27 @@
                     { name: '应急处置方案', status: 'not-started', progress: 0 }
                 ],
                 expired: true
+            },
+            '衍生品交易证书': { 
+                desc: '衍生品交易基础知识培训课程', 
+                hours: 15, exams: 2, courses: 4,
+                validUntil: '2025年12月31日',
+                noNextPeriod: true,
+                courseList: [
+                    { name: '衍生品概述', status: 'completed', progress: 100 },
+                    { name: '交易机制', status: 'completed', progress: 100 },
+                    { name: '定价模型', status: 'completed', progress: 100 },
+                    { name: '风险管理', status: 'completed', progress: 100 }
+                ],
+                expired: true
             }
         };
         
         function goBack() { window.history.back(); }
+        
+        function toggleSection(header) {
+            header.classList.toggle('collapsed');
+        }
         
         var currentTab = 'learning';
         function switchTab(tab) {
@@ -1158,11 +1304,16 @@
         }
         
         function renderCertCards() {
-            var learningSection = document.getElementById('learningSection');
+            var allSection = document.getElementById('allSection');
             var historySection = document.getElementById('historySection');
             
-            var learningHtml = '';
-            var historyHtml = '';
+            var allCertifiedHtml = '';
+            var allNewlyCompletedHtml = '';
+            var allProgressHtml = '';
+            var allApplyHtml = '';
+            var allFreeHtml = '';
+            var historyCertifiedHtml = '';
+            var historyExpiredHtml = '';
             
             for (var name in certData) {
                 var data = certData[name];
@@ -1170,9 +1321,10 @@
                 var isCompleted = data.courseList && data.courseList.every(c => c.status === 'completed' && c.progress === 100);
                 var isCertified = data.isCertified || false;
                 var isExpired = data.expired || false;
+                var isFree = data.isFree || (data.desc && data.desc.indexOf('无需报名') !== -1);
                 
-                if (isCertified) {
-                    historyHtml += '<div class="cert-card">' +
+                if (isCertified && !isExpired) {
+                    historyCertifiedHtml += '<div class="cert-card">' +
                         '<div class="cert-header">' +
                         '<div class="cert-icon" style="background: linear-gradient(135deg, #52c41a, #73d13d); color: white;">🏆</div>' +
                         '<div class="cert-info">' +
@@ -1185,10 +1337,14 @@
                         '<div class="progress-title">获取时间</div>' +
                         '<div style="font-size: 13px; color: #666;">2026年3月15日</div>' +
                         '</div>' +
+                        '<div class="button-group">' +
                         '<button class="cert-btn secondary" onclick="showCertModal(\'' + name + '\')">查看证书</button>' +
+                        '<button class="cert-btn outline" onclick="openDetail(\'' + name + '\')">课程详情</button>' +
+                        '</div>' +
                         '</div>';
                 } else if (isExpired) {
-                    historyHtml += '<div class="cert-card" onclick="openDetail(\'' + name + '\')">' +
+                    var hasNextPeriod = !data.noNextPeriod;
+                    historyExpiredHtml += '<div class="cert-card" onclick="openDetail(\'' + name + '\')">' +
                         '<div class="cert-header">' +
                         '<div class="cert-icon" style="background: linear-gradient(135deg, #fa8c16, #ffad33); color: white;">📜</div>' +
                         '<div class="cert-info">' +
@@ -1198,35 +1354,38 @@
                         '<div class="cert-status expired">已过期</div>' +
                         '</div>' +
                         '<div class="progress-section">' +
-                        '<div class="progress-title">课程信息</div>' +
-                        '<div class="progress-grid">' +
-                        '<div class="progress-item"><div class="progress-value">' + data.hours + '</div><div class="progress-label">课时</div></div>' +
-                        '<div class="progress-item"><div class="progress-value">' + data.courses + '</div><div class="progress-label">课程</div></div>' +
+                        '<div class="progress-title">' + (data.validUntil ? '有效期至' : '过期时间') + '</div>' +
+                        '<div style="font-size: 13px; color: #666;">' + (data.validUntil || '2026年2月28日') + '</div>' +
                         '</div>' +
+                        '<div class="button-group">' +
+                        (hasNextPeriod ? '<button class="cert-btn primary" onclick="event.stopPropagation(); showNextPeriodReminder(\'' + name + '\')">下一期提醒</button>' : '') +
+                        '<button class="cert-btn ' + (hasNextPeriod ? 'outline' : 'primary') + '" onclick="event.stopPropagation(); openDetail(\'' + name + '\')">课程详情</button>' +
                         '</div>' +
-                        '<button class="cert-btn secondary" onclick="event.stopPropagation(); showNextPeriodReminder(\'' + name + '\')">📅 下一期提醒</button>' +
                         '</div>';
                 } else if (hasProgress) {
-                    var completedHours = data.courseList ? data.courseList.filter(c => c.status === 'completed').length : 0;
-                    var hoursDone = completedHours >= data.hours;
+                    var totalCourses = data.courseList ? data.courseList.length : 0;
+                    var completedCourses = data.courseList ? data.courseList.filter(c => c.status === 'completed').length : 0;
+                    var hoursDone = totalCourses > 0 && completedCourses === totalCourses;
+                    var displayHours = hoursDone ? data.hours : completedCourses;
                     
                     var progressItems = [];
                     progressItems.push('<div class="progress-item">' +
                         '<div class="progress-check"' + (hoursDone ? '>✓' : ' style="background: #faad14;">') + '</div>' +
                         '<div class="progress-info">' +
                         '<div class="progress-label">课时</div>' +
-                        '<div class="progress-value">' + completedHours + '/' + data.hours + '</div>' +
+                        '<div class="progress-value">' + displayHours + '/' + data.hours + '</div>' +
                         '</div>' +
                         '</div>');
                     
                     if (data.exams > 0) {
-                        var examScore = 85;
-                        var examDone = examScore >= 80;
+                        var examScore = data.examScore;
+                        var examDone = examScore !== undefined && examScore >= 80;
+                        var examDisplay = examScore !== undefined ? examScore + '分/80分' : '还未考试';
                         progressItems.push('<div class="progress-item">' +
                             '<div class="progress-check"' + (examDone ? '>✓' : ' style="background: #faad14;">') + '</div>' +
                             '<div class="progress-info">' +
                             '<div class="progress-label">考试</div>' +
-                            '<div class="progress-value">' + (examDone ? examScore + '分' : '待完成') + '</div>' +
+                            '<div class="progress-value">' + examDisplay + '</div>' +
                             '</div>' +
                             '</div>');
                     }
@@ -1237,31 +1396,176 @@
                     var buttonClick = isAllDone ? 'event.stopPropagation(); promptForCertName(\'' + name + '\')' : 'event.stopPropagation(); window.location.href=\'视频学习.html\'';
                     var cardStyle = isAllDone ? 'border: 2px solid #fa8c16; box-shadow: 0 4px 16px rgba(250,140,22,0.3);' : '';
                     
-                    learningHtml += '<div class="cert-card" onclick="openDetail(\'' + name + '\')" style="' + cardStyle + '">' +
-                        '<div class="cert-header">' +
-                        '<div class="cert-icon" style="background: ' + (isAllDone ? 'linear-gradient(135deg, #fa8c16, #ffc53d)' : 'linear-gradient(135deg, #1677ff, #40a9ff)') + '; color: white;">' + (isAllDone ? '🏆' : '📋') + '</div>' +
-                        '<div class="cert-info">' +
-                        '<div class="cert-name">' + name + '</div>' +
-                        '<div class="cert-desc">' + data.desc + '</div>' +
-                        '</div>' +
-                        '<div class="cert-status ' + (isAllDone ? 'completed' : 'learning') + '">' + (isAllDone ? '已达标' : '学习中') + '</div>' +
-                        '<div class="cert-arrow" onclick="event.stopPropagation(); openDetail(\'' + name + '\')">›</div>' +
-                        '</div>' +
-                        '<div class="progress-section">' +
-                        '<div class="progress-title">' + (isAllDone ? '学习成果' : '学习进度') + '</div>' +
-                        '<div class="progress-list horizontal">' +
-                        progressItems.join('') +
-                        '</div>' +
-                        '</div>' +
-                        '<div class="button-group">' +
-                        '<button class="' + buttonClass + '" onclick="' + buttonClick + '">' + buttonText + '</button>' +
-                        '<button class="cert-btn outline" onclick="event.stopPropagation(); openDetail(\'' + name + '\')">查看详情</button>' +
-                        '</div>' +
-                        '</div>';
+                    if (isAllDone && isCertified) {
+                        allCertifiedHtml += '<div class="cert-card" onclick="openDetail(\'' + name + '\')" style="' + cardStyle + '">' +
+                            '<div class="cert-header">' +
+                            '<div class="cert-icon" style="background: linear-gradient(135deg, #fa8c16, #ffc53d); color: white;">🏆</div>' +
+                            '<div class="cert-info">' +
+                            '<div class="cert-name">' + name + '</div>' +
+                            '<div class="cert-desc">' + data.desc + '</div>' +
+                            '</div>' +
+                            '<div class="cert-status completed">已达标</div>' +
+                            '</div>' +
+                            '<div class="progress-section">' +
+                            '<div class="progress-title">学习成果</div>' +
+                            '<div class="progress-list horizontal">' +
+                            progressItems.join('') +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="button-group">' +
+                            '<button class="cert-btn primary" onclick="event.stopPropagation(); showCertModal(\'' + name + '\')">查看证书</button>' +
+                            '<button class="cert-btn outline" onclick="event.stopPropagation(); openDetail(\'' + name + '\')">查看详情</button>' +
+                            '</div>' +
+                            '</div>';
+                    } else if (isAllDone && !isCertified) {
+                        allNewlyCompletedHtml += '<div class="cert-card" onclick="openDetail(\'' + name + '\')" style="' + cardStyle + '">' +
+                            '<div class="cert-header">' +
+                            '<div class="cert-icon" style="background: linear-gradient(135deg, #fa8c16, #ffc53d); color: white;">🏆</div>' +
+                            '<div class="cert-info">' +
+                            '<div class="cert-name">' + name + '</div>' +
+                            '<div class="cert-desc">' + data.desc + '</div>' +
+                            '</div>' +
+                            '<div class="cert-status completed">已达标</div>' +
+                            '</div>' +
+                            '<div class="progress-section">' +
+                            '<div class="progress-title">学习成果</div>' +
+                            '<div class="progress-list horizontal">' +
+                            progressItems.join('') +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="button-group">' +
+                            '<button class="' + buttonClass + '" onclick="' + buttonClick + '">' + buttonText + '</button>' +
+                            '<button class="cert-btn outline" onclick="event.stopPropagation(); openDetail(\'' + name + '\')">查看详情</button>' +
+                            '</div>' +
+                            '</div>';
+                    } else {
+                        var timeInfo = data.startTime === '长期有效' 
+                            ? '📅 长期有效' 
+                            : '📅 ' + (data.startTime || '2026年7月1日') + ' - ' + (data.endTime || '2026年8月31日');
+                        allProgressHtml += '<div class="cert-card" onclick="openDetail(\'' + name + '\')" style="' + cardStyle + '">' +
+                            '<div class="cert-header">' +
+                            '<div class="cert-icon" style="background: linear-gradient(135deg, #1677ff, #40a9ff); color: white;">📋</div>' +
+                            '<div class="cert-info">' +
+                            '<div class="cert-name">' + name + '</div>' +
+                            '<div class="cert-desc">' + data.desc + '</div>' +
+                            '</div>' +
+                            '<div class="cert-status learning">学习中</div>' +
+                            '</div>' +
+                            '<div class="progress-section">' +
+                            '<div class="progress-title">学习进度</div>' +
+                            '<div class="progress-list horizontal">' +
+                            progressItems.join('') +
+                            '</div>' +
+                            '</div>' +
+                            '<div style="font-size: 11px; color: #999; margin-bottom: 12px;">' + timeInfo + '</div>' +
+                            '<div class="button-group">' +
+                            '<button class="' + buttonClass + '" onclick="' + buttonClick + '">' + buttonText + '</button>' +
+                            '<button class="cert-btn outline" onclick="event.stopPropagation(); openDetail(\'' + name + '\')">查看详情</button>' +
+                            '</div>' +
+                            '</div>';
+                    }
+                } else {
+                    var timeInfo = data.startTime === '长期有效' 
+                        ? '📅 长期有效' 
+                        : '📅 ' + (data.startTime || '2026年7月1日') + ' - ' + (data.endTime || '2026年8月31日');
+                    
+                    if (isFree) {
+                        allFreeHtml += '<div class="cert-card" onclick="openDetail(\'' + name + '\')">' +
+                            '<div class="cert-header">' +
+                            '<div class="cert-icon" style="background: linear-gradient(135deg, #52c41a, #73d13d); color: white;">🌱</div>' +
+                            '<div class="cert-info">' +
+                            '<div class="cert-name">' + name + '</div>' +
+                            '<div class="cert-desc">' + data.desc + '</div>' +
+                            '</div>' +
+                            '<div class="cert-status free">免报名</div>' +
+                            '</div>' +
+                            '<div style="font-size: 11px; color: #999; margin-bottom: 12px;">' + timeInfo + '</div>' +
+                            '<div class="button-group">' +
+                            '<button class="cert-btn primary" onclick="event.stopPropagation(); window.location.href=\'视频学习.html\'">开始学习</button>' +
+                            '<button class="cert-btn outline" onclick="event.stopPropagation(); openDetail(\'' + name + '\')">查看详情</button>' +
+                            '</div>' +
+                            '</div>';
+                    } else {
+                        allApplyHtml += '<div class="cert-card" onclick="openDetail(\'' + name + '\')">' +
+                            '<div class="cert-header">' +
+                            '<div class="cert-icon" style="background: linear-gradient(135deg, #fa8c16, #ffad33); color: white;">🛡️</div>' +
+                            '<div class="cert-info">' +
+                            '<div class="cert-name">' + name + '</div>' +
+                            '<div class="cert-desc">' + data.desc + '</div>' +
+                            '</div>' +
+                            '<div class="cert-status not-started">未开始</div>' +
+                            '</div>' +
+                            '<div class="progress-section">' +
+                            '<div class="progress-title">课程信息</div>' +
+                            '<div class="progress-list horizontal">' +
+                            '<div class="progress-item"><div class="progress-check"></div><div class="progress-info"><div class="progress-label">课程</div><div class="progress-value">' + data.courses + '</div></div></div>' +
+                            '<div class="progress-item"><div class="progress-check"></div><div class="progress-info"><div class="progress-label">考试</div><div class="progress-value">' + data.exams + '</div></div></div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div style="font-size: 11px; color: #999; margin-bottom: 12px;">' + timeInfo + '</div>' +
+                            '<div class="button-group">' +
+                            '<button class="cert-btn secondary" onclick="event.stopPropagation(); showApplyModal(\'' + name + '\')">立即报名</button>' +
+                            '<button class="cert-btn outline" onclick="event.stopPropagation(); openDetail(\'' + name + '\')">查看详情</button>' +
+                            '</div>' +
+                            '</div>';
+                    }
                 }
             }
             
-            learningSection.innerHTML = learningHtml || '<div style="padding: 40px; text-align: center; color: #999;">暂无正在学习的课程</div>';
+            var allHtml = '';
+            if (allCertifiedHtml) {
+                allHtml += '<div class="section-header" onclick="toggleSection(this)">' +
+                    '<div class="section-title-text">获得证书课程</div>' +
+                    '<div class="section-toggle-icon">›</div>' +
+                    '<div class="section-divider"></div>' +
+                    '</div><div class="section-content">' + allCertifiedHtml + '</div>';
+            }
+            if (allNewlyCompletedHtml) {
+                allHtml += '<div class="section-header" onclick="toggleSection(this)">' +
+                    '<div class="section-title-text">已达标课程</div>' +
+                    '<div class="section-toggle-icon">›</div>' +
+                    '<div class="section-divider"></div>' +
+                    '</div><div class="section-content">' + allNewlyCompletedHtml + '</div>';
+            }
+            if (allProgressHtml) {
+                allHtml += '<div class="section-header" onclick="toggleSection(this)">' +
+                    '<div class="section-title-text">正在学习课程</div>' +
+                    '<div class="section-toggle-icon">›</div>' +
+                    '<div class="section-divider"></div>' +
+                    '</div><div class="section-content">' + allProgressHtml + '</div>';
+            }
+            if (allApplyHtml) {
+                allHtml += '<div class="section-header" onclick="toggleSection(this)">' +
+                    '<div class="section-title-text">待报名课程</div>' +
+                    '<div class="section-toggle-icon">›</div>' +
+                    '<div class="section-divider"></div>' +
+                    '</div><div class="section-content">' + allApplyHtml + '</div>';
+            }
+            if (allFreeHtml) {
+                allHtml += '<div class="section-header" onclick="toggleSection(this)">' +
+                    '<div class="section-title-text">免报名课程</div>' +
+                    '<div class="section-toggle-icon">›</div>' +
+                    '<div class="section-divider"></div>' +
+                    '</div><div class="section-content">' + allFreeHtml + '</div>';
+            }
+            
+            var historyHtml = '';
+            if (historyCertifiedHtml) {
+                historyHtml += '<div class="section-header" onclick="toggleSection(this)">' +
+                    '<div class="section-title-text">已获证书</div>' +
+                    '<div class="section-toggle-icon">›</div>' +
+                    '<div class="section-divider"></div>' +
+                    '</div><div class="section-content">' + historyCertifiedHtml + '</div>';
+            }
+            if (historyExpiredHtml) {
+                historyHtml += '<div class="section-header" onclick="toggleSection(this)">' +
+                    '<div class="section-title-text">已过期课程</div>' +
+                    '<div class="section-toggle-icon">›</div>' +
+                    '<div class="section-divider"></div>' +
+                    '</div><div class="section-content">' + historyExpiredHtml + '</div>';
+            }
+            
+            allSection.innerHTML = allHtml || '<div style="padding: 40px; text-align: center; color: #999;">暂无课程</div>';
             historySection.innerHTML = historyHtml || '<div style="padding: 40px; text-align: center; color: #999;">暂无历史课程</div>';
         }
         
